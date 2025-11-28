@@ -7,23 +7,40 @@ using UnityEngine;
 
 public class TableCreator : MonoBehaviour
 {
+    public SQLiteConnection database = null;
     void Start()
     {
         // 1. Create a connection to the database.
         // The special ":memory:" in-memory database and
         // URIs like "file:///somefile" are also supported
-        string file_loc = Application.persistentDataPath + "/MyDb.db";
-        var db = new SQLiteConnection(file_loc);
+        string file_loc = Application.dataPath + "/Database/MyDb.db";
+        this.database = new SQLiteConnection(file_loc);
         Debug.Log($"Database file at {file_loc}");
 
-        this.CreateTable<CampaignData>(db);
-        this.CreateTable<SessionLogData>(db);
-        this.CreateTable<Log_Entry_Data>(db);
-        this.CreateTable<CharacterData>(db);
-        this.CreateTable<Item_Data>(db);
-        this.CreateTable<Action_Data>(db);
+        this.CreateTable<CampaignData>(this.database);
+        this.CreateTable<SessionLogData>(this.database);
+        this.CreateTable<Log_Entry_Data>(this.database);
+        this.CreateTable<CharacterData>(this.database);
+        this.CreateTable<Item_Data>(this.database);
+        this.CreateTable<Action_Data>(this.database);
     }
 
+    public void callAddCampaignDataEntry(string name, string ruleSystem)
+    {
+        this.AddCampaignDataEntry(this.database, name, ruleSystem);
+    }
+
+    public void AddCampaignDataEntry(SQLiteConnection db, string name, string ruleSystem)
+    {
+        db.Insert(new CampaignData
+        {
+            Campaign_ID = 0,
+            Campaign_Name = name,
+            RuleSystem = ruleSystem
+        });
+
+        Debug.Log($"Added campaign entry: {name} - {ruleSystem}");
+    }
     private void CreateTable<T>(SQLiteConnection db)
     {
         //getting table name
