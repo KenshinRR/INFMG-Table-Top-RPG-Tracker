@@ -7,6 +7,7 @@ using SQLite;
 
 namespace Assets.Scripts.Data_Classes
 {
+    [Table("Actions")]
     public class Action_Data
     {
         [PrimaryKey, AutoIncrement]
