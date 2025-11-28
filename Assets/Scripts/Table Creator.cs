@@ -41,6 +41,64 @@ public class TableCreator : MonoBehaviour
 
         Debug.Log($"Added campaign entry: {name} - {ruleSystem}");
     }
+    public void callAddSessionLogDataEntry(float duration, string summary)
+    {
+        this.AddSessionLogDataEntry(this.database, duration, summary);
+    }
+    public void AddSessionLogDataEntry(SQLiteConnection db, float duration, string summary)
+    {
+        db.Insert(new SessionLogData
+        {
+            Session_ID = 0,
+            Date = System.DateTime.Today.ToString(),
+            Duration = duration,
+            Summary = summary
+        });
+
+        Debug.Log($"Added New Session Log Entry");
+    }
+
+    public void AddCharacterDataEntry(
+        string charType,
+        string charName,
+        string backstory,
+        string alignment,
+        string race,
+        string charClass,
+        int strength,
+        int dexterity,
+        int constitution,
+        int intelligence,
+        int charisma,
+        int armorClass,
+        int speed,
+        int hitpoints,
+        int experiencePoints,
+        int level)
+    {
+        this.database.Insert(new CharacterData
+        {
+            Character_Type = charType,
+            Character_Name = charName,
+            Backstory = backstory,
+            Alignment = alignment,
+            Race = race,
+            Class = charClass,
+            Strength = strength,
+            Dexterity = dexterity,
+            Constitution = constitution,
+            Intelligence = intelligence,
+            Charisma = charisma,
+            Armor_Class = armorClass,
+            Speed = speed,
+            Hitpoints = hitpoints,
+            Experience_Points = experiencePoints,
+            Character_Level = level
+        });
+        Debug.Log($"Added New Character Entry: {charName}");
+    }
+
+
     private void CreateTable<T>(SQLiteConnection db)
     {
         //getting table name
@@ -58,6 +116,7 @@ public class TableCreator : MonoBehaviour
             db.CreateTable<T>();
         }
     }
+
 
     private bool DoesTableExist(SQLiteConnection db, string table_name)
     {

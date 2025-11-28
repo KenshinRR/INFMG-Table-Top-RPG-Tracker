@@ -16,7 +16,7 @@ public class SessionLogData
     { get; set; }
 
     [Column("Duration")]
-    public int Duration
+    public float Duration
     { get; set; }
 
     [Column("Summary")]
