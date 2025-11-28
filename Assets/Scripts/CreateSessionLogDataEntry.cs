@@ -7,6 +7,10 @@ public class CreateSessionLogDataEntry : MonoBehaviour
 {
     [SerializeField] public TableCreator tableCreator;
 
+    [SerializeField] public TMP_Text CampaignIDText;
+    [SerializeField] public CampaignData campaignData = null;
+    [SerializeField] private bool campaignDataAssigned = false;
+
     [SerializeField] public TMP_Text durationInHoursText;
     [SerializeField] public TMP_Text summaryText;
 
@@ -16,29 +20,36 @@ public class CreateSessionLogDataEntry : MonoBehaviour
     [Tooltip("If true, uses the text directly placed here instead of the ones attached to the UI.")]
     public bool debugMode = false;
 
+    public void AssignCampaignData()
+    {
+        if (int.TryParse(CampaignIDText.text, out int CampaignID))
+        {
+            this.campaignData = this.tableCreator.database.Find<CampaignData>(CampaignID);
+            if (this.campaignData != null)
+            {
+                this.campaignDataAssigned = true;
+                Debug.Log($"Assigned CampaignData with Campaign_ID: {CampaignID}");
+            }
+            else
+                Debug.LogError($"Failed to find CampaignData with Campaign_ID: {CampaignID}");
+        }
+        else
+            Debug.LogError("Failed to parse Campaign ID input as integer.");
+        this.campaignData = this.tableCreator.database.Find<CampaignData>(CampaignID);
+
+    }
+
     public void CreateSessionLogEntry()
     {
         if (this.debugMode)
         {
-            this.tableCreator.AddSessionLogDataEntry(this.tableCreator.database, this.durationInHours, this.summary);
+            this.tableCreator.AddSessionLogDataEntry(0, this.durationInHours, this.summary);
         }
-        else if (float.TryParse(this.durationInHoursText.text, out float floatResult))
+        else if (this.campaignDataAssigned && int.TryParse(CampaignIDText.text, out int cID)&& float.TryParse(this.durationInHoursText.text, out float floatResult))
         {
-            this.tableCreator.AddSessionLogDataEntry(this.tableCreator.database, floatResult, this.summaryText.text);
+            this.tableCreator.AddSessionLogDataEntry(cID, floatResult, this.summaryText.text);
         }
         else
-            Debug.LogError("Failed to parse duration input as float.");
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+            Debug.LogError("Failed to parse Campaign ID input as integer or Duration input as float.");
     }
 }

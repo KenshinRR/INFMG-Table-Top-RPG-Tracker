@@ -23,16 +23,4 @@ public class CreateCampaignDataEntry : MonoBehaviour
         else 
         this.tableCreator.AddCampaignDataEntry(this.tableCreator.database, this.campaignNameText.text, this.ruleSystemText.text);
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

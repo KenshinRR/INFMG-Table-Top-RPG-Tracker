@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SQLite;
 
-[Table("Sesson Logs")]
+[Table("Session Logs")]
 public class SessionLogData
 {
     [PrimaryKey, AutoIncrement]

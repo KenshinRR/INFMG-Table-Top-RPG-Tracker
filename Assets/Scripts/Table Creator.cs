@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
+using Assets.Scripts.Relations;
 public class TableCreator : MonoBehaviour
 {
     public SQLiteConnection database = null;
@@ -23,6 +24,13 @@ public class TableCreator : MonoBehaviour
         this.CreateTable<CharacterData>(this.database);
         this.CreateTable<Item_Data>(this.database);
         this.CreateTable<Action_Data>(this.database);
+
+        //Relations Tables
+        this.CreateTable<CampaignSessions>(this.database);
+        this.CreateTable<SessionLogEntries>(this.database);
+        this.CreateTable<CharacterItems>(this.database);
+        this.CreateTable<CharacterActions>(this.database);
+
     }
 
     public void callAddCampaignDataEntry(string name, string ruleSystem)
@@ -41,24 +49,49 @@ public class TableCreator : MonoBehaviour
 
         Debug.Log($"Added campaign entry: {name} - {ruleSystem}");
     }
-    public void callAddSessionLogDataEntry(float duration, string summary)
+    public void AddSessionLogDataEntry(int campaignID, float duration, string summary)
     {
-        this.AddSessionLogDataEntry(this.database, duration, summary);
-    }
-    public void AddSessionLogDataEntry(SQLiteConnection db, float duration, string summary)
-    {
-        db.Insert(new SessionLogData
+        database.Insert(new SessionLogData
         {
-            Session_ID = 0,
             Date = System.DateTime.Today.ToString(),
             Duration = duration,
             Summary = summary
         });
 
+        var lastSessionEntry = this.database.Table<SessionLogData>().OrderByDescending(x => x.Session_ID).FirstOrDefault();
+        int lastSessionID = lastSessionEntry.Session_ID;
+
+        database.Insert(new CampaignSessions
+        {
+            Campaign_ID = campaignID,
+            Session_ID = lastSessionID
+        });
+
         Debug.Log($"Added New Session Log Entry");
     }
+    public void AddLogEntryDataEntry(int SessionID, string D0, string D1, int RolledDice, int RolledDiceResult)
+    {
+        this.database.Insert(new Log_Entry_Data
+        {
+            Desc0 = D0,
+            Desc1 = D1,
+            Dice = RolledDice,
+            DiceResult = RolledDiceResult
+        });
 
-    public void AddCharacterDataEntry(
+        var lastLogEntry = this.database.Table<Log_Entry_Data>().OrderByDescending(x => x.Log_ID).FirstOrDefault();
+        int lastLogID = lastLogEntry.Log_ID;
+
+        this.database.Insert(new SessionLogEntries
+        {
+            Session_ID = SessionID,
+            Log_ID = lastLogID
+        });
+
+        Debug.Log($"Added New Log Entry Data");
+    }
+
+    public void AddCharacterDataEntry( //add int PlayerID, when the player class is ready
         string charType,
         string charName,
         string backstory,
@@ -95,7 +128,59 @@ public class TableCreator : MonoBehaviour
             Experience_Points = experiencePoints,
             Character_Level = level
         });
+
+        /*
+        var lastCharacterEntry = this.database.Table<CharacterData>().OrderByDescending(x => x.Character_ID).FirstOrDefault();
+        int lastCharacterID = lastCharacterEntry.Character_ID;
+
+        this.database.Insert(new CampaignCharacters
+        {
+            Campaign_ID = campaignID,
+            Character_ID = lastCharacterID
+        });*/
+
         Debug.Log($"Added New Character Entry: {charName}");
+    }
+
+    public void AddActionDataEntry(int characterID, string aName, string aDesc)
+    {
+        this.database.Insert(new Action_Data
+        {
+            Action_Name = aName,
+            Action_Description = aDesc
+        });
+
+        var lastActionEntry = this.database.Table<Action_Data>().OrderByDescending(x => x.Action_ID).FirstOrDefault();
+        int lastActionID = lastActionEntry.Action_ID;
+
+        this.database.Insert (new CharacterActions
+        {
+            Character_ID = characterID,
+            Action_ID = lastActionID
+        });
+
+        Debug.Log($"Added New Action Data Entry: {aName}");
+    }
+
+    public void AddItemDataEntry(int characterID, string iName, string iDesc, int itemQuantity)
+    {
+        this.database.Insert(new Item_Data
+        {
+            Item_Name = iName,
+            Item_Description = iDesc
+        });
+
+        var lastItemEntry = this.database.Table<Item_Data>().OrderByDescending(x => x.Item_ID).FirstOrDefault();
+        int lastItemID = lastItemEntry.Item_ID;
+
+        this.database.Insert(new CharacterItems
+        {
+            Character_ID = characterID,
+            Item_ID = lastItemID,
+            Quantity = itemQuantity
+        });
+
+        Debug.Log($"Added New Action Data Entry: {iName}");
     }
 
 
