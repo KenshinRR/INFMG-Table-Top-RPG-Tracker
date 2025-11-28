@@ -197,7 +197,6 @@ GameObject:
   m_Component:
   - component: {fileID: 303308400}
   - component: {fileID: 303308399}
-  - component: {fileID: 303308401}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -233,18 +232,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &303308401
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 303308398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bb87147afc5b814fbe4e776c718c73f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &325823942
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,6 +603,7 @@ GameObject:
   m_Component:
   - component: {fileID: 795069371}
   - component: {fileID: 795069370}
+  - component: {fileID: 795069372}
   m_Layer: 0
   m_Name: TableCreator
   m_TagString: Untagged
@@ -650,6 +638,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &795069372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795069369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27d8fe02131045149bfb6763a0d6581c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tableCreator: {fileID: 0}
+  charTypeText: {fileID: 0}
+  charNameText: {fileID: 0}
+  backstoryText: {fileID: 0}
+  alignmentText: {fileID: 0}
+  raceText: {fileID: 0}
+  charClassText: {fileID: 0}
+  strengthText: {fileID: 0}
+  dexterityText: {fileID: 0}
+  constitutionText: {fileID: 0}
+  intelligenceText: {fileID: 0}
+  charismaText: {fileID: 0}
+  armorClassText: {fileID: 0}
+  speedText: {fileID: 0}
+  hitpointsText: {fileID: 0}
+  experiencePointsText: {fileID: 0}
+  levelText: {fileID: 0}
+  charType: PC
+  charName: Namae
+  backstory: ...
+  alignment: Lawful Good
+  race: Human
+  charClass: Ranger
+  strength: 16
+  dexterity: 14
+  constitution: 15
+  intelligence: 12
+  charisma: 13
+  armorClass: 17
+  speed: 30
+  hitpoints: 45
+  experiencePoints: 0
+  level: 1
+  debugMode: 0
 --- !u!1 &795675783
 GameObject:
   m_ObjectHideFlags: 0

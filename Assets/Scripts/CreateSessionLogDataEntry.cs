@@ -16,7 +16,7 @@ public class CreateSessionLogDataEntry : MonoBehaviour
     [Tooltip("If true, uses the text directly placed here instead of the ones attached to the UI.")]
     public bool debugMode = false;
 
-    public void CreateCampaignEntry()
+    public void CreateSessionLogEntry()
     {
         if (this.debugMode)
         {
