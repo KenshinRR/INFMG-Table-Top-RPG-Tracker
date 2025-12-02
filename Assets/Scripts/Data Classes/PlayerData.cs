@@ -5,22 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using SQLite;
 
-namespace Assets.Scripts.Relations
+namespace Assets.Scripts.Data_Classes
 {
-    [Table("PlayerCharacters")]
-    public class PlayerCharacters
+    [Table("Player")]
+    public class PlayerData
     {
         [PrimaryKey]
-        [Column("Relation ID")]
-        public int Relation_ID
-        { get; set; }
-
         [Column("Player ID")]
         public int Player_ID
         { get; set; }
 
-        [Column("Character ID")]
-        public int Character_ID
+        [Column("Player Name")]
+        public string Player_Name
         { get; set; }
     }
 }

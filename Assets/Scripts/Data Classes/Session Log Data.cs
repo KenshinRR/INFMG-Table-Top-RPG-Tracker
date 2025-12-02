@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SQLite;
 
-[Table("Sesson Logs")]
+[Table("Session Logs")]
 public class SessionLogData
 {
     [PrimaryKey, AutoIncrement]
@@ -16,7 +16,7 @@ public class SessionLogData
     { get; set; }
 
     [Column("Duration")]
-    public int Duration
+    public float Duration
     { get; set; }
 
     [Column("Summary")]

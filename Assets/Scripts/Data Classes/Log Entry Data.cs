@@ -10,7 +10,7 @@ namespace Assets.Scripts.Data_Classes
     [Table("Log Entries")]
     public class Log_Entry_Data
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey,AutoIncrement]
         [Column("Log ID")]
         public int Log_ID
         { get; set; }
