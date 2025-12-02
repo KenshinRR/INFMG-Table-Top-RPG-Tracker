@@ -10,6 +10,11 @@ namespace Assets.Scripts.Relations
     [Table("SessionLogEntries")]
     public class SessionLogEntries
     {
+        [PrimaryKey]
+        [Column("Relation ID")]
+        public int Relation_ID
+        { get; set; }
+
         [Column("Session ID")]
         public int Session_ID
         { get; set; }

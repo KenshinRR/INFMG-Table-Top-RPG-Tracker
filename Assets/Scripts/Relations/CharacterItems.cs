@@ -10,6 +10,11 @@ namespace Assets.Scripts.Relations
     [Table("CharacterItems")]
     public class CharacterItems
     {
+        [PrimaryKey]
+        [Column("Relation ID")]
+        public int Relation_ID
+        { get; set; }
+
         [Column("Character ID")]
         public int Character_ID
         { get; set; }
