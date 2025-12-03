@@ -17,16 +17,24 @@ namespace Assets.Scripts.Queries
         private SQLiteConnection database;
         private TextMeshProUGUI _label;
 
+        private QueryDataViewerHandler _Query_Data_Viewer_Handler;
+
         [Header("Campaign Inputs")]
         [SerializeField]
-        private TMP_InputField if_campaignID;
+        private TMP_InputField c_if_campaignID;
         [SerializeField]
-        private TMP_InputField if_playerID;
+        private TMP_InputField c_if_playerID;
+
+        [Header("Session Inputs")]
+        [SerializeField]
+        private TMP_InputField s_if_campaignID;
 
         void Start()
         {
             string file_loc = Application.dataPath + "/Database/MyDb.db";
             this.database = new SQLiteConnection(file_loc);
+
+            this._Query_Data_Viewer_Handler = GetComponent<QueryDataViewerHandler>();
         }
 
         public void AssignTextLabel(TextMeshProUGUI current_label)
@@ -46,18 +54,18 @@ namespace Assets.Scripts.Queries
             bool camp_id_exists = false, player_id_exists = false;
 
             //getting campaign ID
-            if (int.TryParse(if_campaignID.text, out curr_campaign_id))
+            if (int.TryParse(c_if_campaignID.text, out curr_campaign_id))
             {
                 where_condition += "C.CampaignID = " + curr_campaign_id;
                 camp_id_exists = true;
             }
             else
             {
-                Debug.LogWarning("Invalid input: '" + if_campaignID.text + "' cannot be converted to an integer.");
+                Debug.LogWarning("Invalid input: '" + c_if_campaignID.text + "' cannot be converted to an integer.");
             }
 
             //getting player ID
-            if (int.TryParse(if_playerID.text, out curr_player_id))
+            if (int.TryParse(c_if_playerID.text, out curr_player_id))
             {
                 if (camp_id_exists)
                 {
@@ -69,7 +77,7 @@ namespace Assets.Scripts.Queries
             }
             else
             {
-                Debug.LogWarning("Invalid input: '" + if_playerID.text + "' cannot be converted to an integer.");
+                Debug.LogWarning("Invalid input: '" + c_if_playerID.text + "' cannot be converted to an integer.");
             }
 
             //checking if there are inputs
@@ -77,7 +85,7 @@ namespace Assets.Scripts.Queries
             {
                 Debug.LogError("No inputted filters!");
 
-                GetComponent<QueryDataViewerHandler>().OnCampaignDataView();
+                this._Query_Data_Viewer_Handler.OnCampaignDataView();
 
                 return;
             }
@@ -131,6 +139,58 @@ namespace Assets.Scripts.Queries
             }
 
             //Debug.Log(to_print);
+
+            this.UpdateText(to_print);
+        }
+    
+        public void OnFilterSessions()
+        {
+            int curr_camp_id;
+            bool camp_id_exists = false;
+
+            //getting campaign ID
+            if (int.TryParse(c_if_campaignID.text, out curr_camp_id))
+            {
+                camp_id_exists = true;
+            }
+            else
+            {
+                Debug.LogWarning("Invalid input: '" + c_if_campaignID.text + "' cannot be converted to an integer.");
+            }
+
+            if (!camp_id_exists)
+            {
+                this._Query_Data_Viewer_Handler.OnSessionDataView();
+
+                return;
+            }
+
+            var sl_results = database.Query<SessionLogData>(
+                "SELECT C.CampaignID, SL.SessionID, SL.Date \r\n" +
+                "FROM 'Campaigns' C, 'Session_Logs' SL, CampaignSessions CS\r\n" +
+                "WHERE C.CampaignID = CS.CampaignID\r\n" +
+                "AND SL.SessionID = CS.SessionID\r\n" +
+                $"AND C.CampaignID = {curr_camp_id}"
+                );
+
+            var camp_results = database.Query<CampaignData>(
+                "SELECT C.CampaignID, SL.SessionID, SL.Date \r\n" +
+                "FROM 'Campaigns' C, 'Session_Logs' SL, CampaignSessions CS\r\n" +
+                "WHERE C.CampaignID = CS.CampaignID\r\n" +
+                "AND SL.SessionID = CS.SessionID\r\n" +
+                $"AND C.CampaignID = {curr_camp_id}"
+                );
+
+            string to_print = "";
+
+            for (int i = 0; i < sl_results.Count; i++)
+            {
+                to_print +=
+                    $"Campaign ID: {camp_results[i].Campaign_ID} // Session ID: {sl_results[i].Session_ID} // Date: {sl_results[i].Date}\r\n"
+                    ;
+            }
+
+            Debug.Log(to_print);
 
             this.UpdateText(to_print);
         }

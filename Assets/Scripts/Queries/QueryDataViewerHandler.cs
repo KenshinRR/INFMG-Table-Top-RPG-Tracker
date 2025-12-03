@@ -72,18 +72,20 @@ namespace Assets.Scripts.Queries
 
         public void OnSessionDataView()
         {
-            var results = database.Query<SessionLogData>(
-                "SELECT SessionID, Date FROM Session_Logs"
+            var sl_results = database.Query<SessionLogData>(
+                "SELECT C.CampaignID, SL.SessionID, SL.Date \r\nFROM 'Campaigns' C, 'Session_Logs' SL, CampaignSessions CS\r\nWHERE C.CampaignID = CS.CampaignID\r\nAND SL.SessionID = CS.SessionID"
+                );
+
+            var camp_results = database.Query<CampaignData>(
+                "SELECT C.CampaignID, SL.SessionID, SL.Date \r\nFROM 'Campaigns' C, 'Session_Logs' SL, CampaignSessions CS\r\nWHERE C.CampaignID = CS.CampaignID\r\nAND SL.SessionID = CS.SessionID"
                 );
 
             string to_print = "";
 
-            foreach (SessionLogData sessionLog in results)
+            for (int i = 0; i < sl_results.Count; i++)
             {
                 to_print +=
-                    "ID: " + sessionLog.Session_ID
-                    + " // Date: " + sessionLog.Date
-                    + "\n"
+                    $"Campaign ID: {camp_results[i].Campaign_ID} // Session ID: {sl_results[i].Session_ID} // Date: {sl_results[i].Date}\r\n"
                     ;
             }
 
