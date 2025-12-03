@@ -165,13 +165,13 @@ namespace Assets.Scripts.Queries
             bool camp_id_exists = false;
 
             //getting campaign ID
-            if (int.TryParse(c_if_campaignID.text, out curr_camp_id))
+            if (int.TryParse(s_if_campaignID.text, out curr_camp_id))
             {
                 camp_id_exists = true;
             }
             else
             {
-                Debug.LogWarning("Invalid input: '" + c_if_campaignID.text + "' cannot be converted to an integer.");
+                Debug.LogWarning("Invalid input: '" + s_if_campaignID.text + "' cannot be converted to an integer.");
             }
 
             if (!camp_id_exists)
@@ -246,6 +246,7 @@ namespace Assets.Scripts.Queries
             if (!camp_id_exists && !sess_id_exists)
             {
                 this._Query_Data_Viewer_Handler.OnLogsDataView();
+                return;
             }
 
             string query_string =
