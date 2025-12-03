@@ -8,19 +8,20 @@ public class CreateItemDataEntry : MonoBehaviour
 {
     [SerializeField] public TableCreator tableCreator;
 
-    [SerializeField] public TMP_Text CharacterIDText;
+    [SerializeField] public TMP_InputField CharacterIDText;
     [SerializeField] public CharacterData characterData = null;
     [SerializeField] private bool characterDataAssigned = false;
 
-    [SerializeField] public TMP_Text itemNameText;
-    [SerializeField] public TMP_Text itemDescText;
-    [SerializeField] public TMP_Text itemQuantityText;
+    [SerializeField] public TMP_InputField itemNameText;
+    [SerializeField] public TMP_InputField itemDescText;
+    [SerializeField] public TMP_InputField itemQuantityText;
 
     [Tooltip("If true, uses the text directly placed inside the script instead of the ones attached to the UI.")]
     public bool debugMode = false;
 
     public void AssignCharacterData()
     {
+        characterDataAssigned = false;
         if (int.TryParse(CharacterIDText.text, out int CharacterID))
         {
             this.characterData = this.tableCreator.database.Find<CharacterData>(CharacterID);
@@ -34,12 +35,13 @@ public class CreateItemDataEntry : MonoBehaviour
         }
         else
             Debug.LogError("Failed to parse Character ID input as integer.");
-        this.characterData = this.tableCreator.database.Find<CharacterData>(CharacterID);
 
     }
 
     public void createItemData()
     {
+        AssignCharacterData();
+
         if (debugMode)
             tableCreator.AddItemDataEntry(0, "Potion", "Heals a target for d8 HP.", 1);
         else if (this.characterDataAssigned && int.TryParse(itemQuantityText.text,out int quantity))

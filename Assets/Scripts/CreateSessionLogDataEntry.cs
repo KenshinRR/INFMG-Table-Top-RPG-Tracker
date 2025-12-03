@@ -7,12 +7,12 @@ public class CreateSessionLogDataEntry : MonoBehaviour
 {
     [SerializeField] public TableCreator tableCreator;
 
-    [SerializeField] public TMP_Text CampaignIDText;
+    [SerializeField] public TMP_InputField CampaignIDText;
     [SerializeField] public CampaignData campaignData = null;
     [SerializeField] private bool campaignDataAssigned = false;
 
-    [SerializeField] public TMP_Text durationInHoursText;
-    [SerializeField] public TMP_Text summaryText;
+    [SerializeField] public TMP_InputField durationInHoursText;
+    [SerializeField] public TMP_InputField summaryText;
 
     [SerializeField] public float durationInHours = 1.5f;
     [SerializeField] public string summary = "Once upon a time, stuff happened, The End.";
@@ -31,16 +31,20 @@ public class CreateSessionLogDataEntry : MonoBehaviour
                 Debug.Log($"Assigned CampaignData with Campaign_ID: {CampaignID}");
             }
             else
+            {
                 Debug.LogError($"Failed to find CampaignData with Campaign_ID: {CampaignID}");
+            }
         }
         else
+        {
             Debug.LogError("Failed to parse Campaign ID input as integer.");
-        this.campaignData = this.tableCreator.database.Find<CampaignData>(CampaignID);
-
+        }
     }
+
 
     public void CreateSessionLogEntry()
     {
+        AssignCampaignData();
         if (this.debugMode)
         {
             this.tableCreator.AddSessionLogDataEntry(0, this.durationInHours, this.summary);
