@@ -35,12 +35,10 @@ public class TableCreator : MonoBehaviour
         this.CreateTable<PlayerCharacters>(this.database);
 
     }
-
     public void callAddCampaignDataEntry(string name, string ruleSystem)
     {
         this.AddCampaignDataEntry(this.database, name, ruleSystem);
     }
-
     public void AddCampaignDataEntry(SQLiteConnection db, string name, string ruleSystem)
     {
         string query =
@@ -109,8 +107,6 @@ public class TableCreator : MonoBehaviour
 
         Debug.Log("Added New Log Entry Data");
     }
-
-
     public void AddCharacterDataEntry(
         string charType,
         string charName,
@@ -169,8 +165,6 @@ public class TableCreator : MonoBehaviour
 
         Debug.Log($"Added New Character Entry: {charName}");
     }
-
-
     public void AddActionDataEntry(int characterID, string aName, string aDesc)
     {
         // Escape strings
@@ -230,10 +224,6 @@ public class TableCreator : MonoBehaviour
 
         Debug.Log($"Added New Item Data Entry: {iName}");
     }
-
-
-
-
 
     private void CreateTable<T>(SQLiteConnection db)
     {
