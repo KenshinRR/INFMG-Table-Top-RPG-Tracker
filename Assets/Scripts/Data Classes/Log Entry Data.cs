@@ -7,19 +7,19 @@ using SQLite;
 
 namespace Assets.Scripts.Data_Classes
 {
-    [Table("Log Entries")]
+    [Table("Log_Entries")]
     public class Log_Entry_Data
     {
         [PrimaryKey,AutoIncrement]
-        [Column("Log ID")]
+        [Column("LogID")]
         public int Log_ID
         { get; set; }
 
-        [Column("Description 0")]
+        [Column("Description0")]
         public string Desc0
         { get; set; }
 
-        [Column("Description 1")]
+        [Column("Description1")]
         public string Desc1
         { get; set; }
 
@@ -27,7 +27,7 @@ namespace Assets.Scripts.Data_Classes
         public int Dice
         { get; set; }
 
-        [Column("Dice Result")]
+        [Column("DiceResult")]
         public int DiceResult
         { get; set; }
     }

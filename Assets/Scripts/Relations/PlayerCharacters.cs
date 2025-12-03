@@ -11,15 +11,15 @@ namespace Assets.Scripts.Relations
     public class PlayerCharacters
     {
         [PrimaryKey]
-        [Column("Relation ID")]
+        [Column("RelationID")]
         public int Relation_ID
         { get; set; }
 
-        [Column("Player ID")]
+        [Column("PlayerID")]
         public int Player_ID
         { get; set; }
 
-        [Column("Character ID")]
+        [Column("CharacterID")]
         public int Character_ID
         { get; set; }
     }

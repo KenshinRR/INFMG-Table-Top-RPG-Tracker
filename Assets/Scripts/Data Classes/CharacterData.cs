@@ -11,15 +11,15 @@ namespace Assets.Scripts.Data_Classes
     public class CharacterData
     {
         [PrimaryKey, AutoIncrement]
-        [Column("Character ID")]
+        [Column("CharacterID")]
         public int Character_ID
         { get; set; }
 
-        [Column("Character Type")]
+        [Column("CharacterType")]
         public string Character_Type
         { get; set; }
 
-        [Column("Character Name")]
+        [Column("CharacterName")]
         public string Character_Name
         { get; set; }
 
@@ -71,11 +71,11 @@ namespace Assets.Scripts.Data_Classes
         public int Hitpoints
         { get; set; }
 
-        [Column("Experience Points")]
+        [Column("ExperiencePoints")]
         public int Experience_Points
         { get; set; }
 
-        [Column("Character Level")]
+        [Column("CharacterLevel")]
         public int Character_Level
         { get; set; }
     }

@@ -11,15 +11,15 @@ namespace Assets.Scripts.Relations
     public class CampaignSessions
     {
         [PrimaryKey]
-        [Column("Relation ID")]
+        [Column("RelationID")]
         public int Relation_ID
         { get; set; }
 
-        [Column("Campaign ID")]
+        [Column("CampaignID")]
         public int Campaign_ID
         { get; set; }
 
-        [Column("Session ID")]
+        [Column("SessionID")]
         public int Session_ID
         { get; set; }
     }

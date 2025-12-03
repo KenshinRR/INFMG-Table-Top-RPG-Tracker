@@ -11,15 +11,15 @@ namespace Assets.Scripts.Data_Classes
     public class Action_Data
     {
         [PrimaryKey, AutoIncrement]
-        [Column("Action ID")]
+        [Column("Action_ID")]
         public int Action_ID
         { get; set; }
 
-        [Column("Action Name")]
+        [Column("Action_Name")]
         public string Action_Name
         { get; set; }
 
-        [Column("Action Description")]
+        [Column("Action_Description")]
         public string Action_Description
         { get; set; }
     }

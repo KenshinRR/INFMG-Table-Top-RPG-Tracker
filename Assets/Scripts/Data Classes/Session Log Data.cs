@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using SQLite;
 
-[Table("Session Logs")]
+[Table("Session_Logs")]
 public class SessionLogData
 {
     [PrimaryKey, AutoIncrement]
-    [Column("Session ID")]
+    [Column("SessionID")]
     public int Session_ID
     { get; set; }
 

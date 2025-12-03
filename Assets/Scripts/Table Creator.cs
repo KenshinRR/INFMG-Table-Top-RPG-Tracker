@@ -1,11 +1,11 @@
 using Assets.Scripts.Data_Classes;
+using Assets.Scripts.Relations;
 using SQLite;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
-
-using Assets.Scripts.Relations;
 public class TableCreator : MonoBehaviour
 {
     public SQLiteConnection database = null;
@@ -40,58 +40,75 @@ public class TableCreator : MonoBehaviour
 
     public void AddCampaignDataEntry(SQLiteConnection db, string name, string ruleSystem)
     {
-        db.Insert(new CampaignData
-        {
-            Campaign_ID = 0,
-            Campaign_Name = name,
-            RuleSystem = ruleSystem
-        });
+        string query =
+            $"INSERT INTO Campaigns (CampaignName, RuleSystem) " +
+            $"VALUES ('{name}', '{ruleSystem}');";
+
+        db.Query<CampaignData>(query);
+
 
         Debug.Log($"Added campaign entry: {name} - {ruleSystem}");
     }
     public void AddSessionLogDataEntry(int campaignID, float duration, string summary)
     {
-        database.Insert(new SessionLogData
-        {
-            Date = System.DateTime.Today.ToString(),
-            Duration = duration,
-            Summary = summary
-        });
+        // Sanitize string values to avoid SQL errors if they contain single quotes
+        string safeDate = System.DateTime.Today.ToString().Replace("'", "''");
+        string safeSummary = summary.Replace("'", "''");
 
-        var lastSessionEntry = this.database.Table<SessionLogData>().OrderByDescending(x => x.Session_ID).FirstOrDefault();
+        string insertSessionQuery =
+            $"INSERT INTO Session_Logs (Date, Duration, Summary) " +
+            $"VALUES ('{safeDate}', '{duration}', '{safeSummary}');";
+
+        database.Query<SessionLogData>(insertSessionQuery);
+
+        string getLastSessionQuery =
+            "SELECT * FROM Session_Logs ORDER BY SessionID DESC LIMIT 1;";
+
+        var lastSessionEntry = database.Query<SessionLogData>(getLastSessionQuery).FirstOrDefault();
+
         int lastSessionID = lastSessionEntry.Session_ID;
 
-        database.Insert(new CampaignSessions
-        {
-            Campaign_ID = campaignID,
-            Session_ID = lastSessionID
-        });
+        string insertCampaignSessionQuery =
+            $"INSERT INTO CampaignSessions (CampaignID, SessionID) " +
+            $"VALUES ({campaignID}, {lastSessionID});";
 
-        Debug.Log($"Added New Session Log Entry");
+        database.Query<CampaignSessions>(insertCampaignSessionQuery);
+
+        Debug.Log("Added New Session Log Entry");
+
     }
     public void AddLogEntryDataEntry(int SessionID, string D0, string D1, int RolledDice, int RolledDiceResult)
     {
-        this.database.Insert(new Log_Entry_Data
-        {
-            Desc0 = D0,
-            Desc1 = D1,
-            Dice = RolledDice,
-            DiceResult = RolledDiceResult
-        });
+        // Escape only string inputs
+        string safeD0 = D0.Replace("'", "''");
+        string safeD1 = D1.Replace("'", "''");
 
-        var lastLogEntry = this.database.Table<Log_Entry_Data>().OrderByDescending(x => x.Log_ID).FirstOrDefault();
+        // 1. Insert into Log_Entry_Data
+        string insertLogQuery =
+            $"INSERT INTO Log_Entries (Description0, Description1, Dice, DiceResult) " +
+            $"VALUES ('{safeD0}', '{safeD1}', {RolledDice}, {RolledDiceResult});";
+
+        this.database.Query<Log_Entry_Data>(insertLogQuery);
+
+        // 2. Retrieve last inserted Log_ID
+        string getLastLogQuery =
+            "SELECT * FROM Log_Entries ORDER BY LogID DESC LIMIT 1;";
+
+        var lastLogEntry = this.database.Query<Log_Entry_Data>(getLastLogQuery).FirstOrDefault();
         int lastLogID = lastLogEntry.Log_ID;
 
-        this.database.Insert(new SessionLogEntries
-        {
-            Session_ID = SessionID,
-            Log_ID = lastLogID
-        });
+        // 3. Insert into SessionLogEntries
+        string insertSessionLogEntry =
+            $"INSERT INTO SessionLogEntries (SessionID, LogID) " +
+            $"VALUES ({SessionID}, {lastLogID});";
 
-        Debug.Log($"Added New Log Entry Data");
+        this.database.Query<SessionLogEntries>(insertSessionLogEntry);
+
+        Debug.Log("Added New Log Entry Data");
     }
 
-    public void AddCharacterDataEntry( //add int PlayerID, when the player class is ready
+
+    public void AddCharacterDataEntry(
         string charType,
         string charName,
         string backstory,
@@ -109,79 +126,110 @@ public class TableCreator : MonoBehaviour
         int experiencePoints,
         int level)
     {
-        this.database.Insert(new CharacterData
-        {
-            Character_Type = charType,
-            Character_Name = charName,
-            Backstory = backstory,
-            Alignment = alignment,
-            Race = race,
-            Class = charClass,
-            Strength = strength,
-            Dexterity = dexterity,
-            Constitution = constitution,
-            Intelligence = intelligence,
-            Charisma = charisma,
-            Armor_Class = armorClass,
-            Speed = speed,
-            Hitpoints = hitpoints,
-            Experience_Points = experiencePoints,
-            Character_Level = level
-        });
+        // Escape all string inputs to prevent SQL errors from single quotes
+        string safeType = charType.Replace("'", "''");
+        string safeName = charName.Replace("'", "''");
+        string safeBackstory = backstory.Replace("'", "''");
+        string safeAlignment = alignment.Replace("'", "''");
+        string safeRace = race.Replace("'", "''");
+        string safeClass = charClass.Replace("'", "''");
+
+        // 1. Insert CharacterData entry
+        string insertCharacterQuery =
+            "INSERT INTO Characters (" +
+            "Character_Type, Character_Name, Backstory, Alignment, Race, Class, " +
+            "Strength, Dexterity, Constitution, Intelligence, Charisma, " +
+            "Armor_Class, Speed, Hitpoints, ExperiencePoints, CharacterLevel" +
+            ") VALUES (" +
+            $"'{safeType}', '{safeName}', '{safeBackstory}', '{safeAlignment}', '{safeRace}', '{safeClass}', " +
+            $"{strength}, {dexterity}, {constitution}, {intelligence}, {charisma}, " +
+            $"{armorClass}, {speed}, {hitpoints}, {experiencePoints}, {level}" +
+            ");";
+
+        this.database.Query<CharacterData>(insertCharacterQuery);
 
         /*
-        var lastCharacterEntry = this.database.Table<CharacterData>().OrderByDescending(x => x.Character_ID).FirstOrDefault();
+        // 2. Retrieve last inserted Character_ID
+        string getLastCharacterQuery =
+            "SELECT * FROM Characters ORDER BY CharacterID DESC LIMIT 1;";
+
+        var lastCharacterEntry = this.database.Query<CharacterData>(getLastCharacterQuery).FirstOrDefault();
         int lastCharacterID = lastCharacterEntry.Character_ID;
 
-        this.database.Insert(new CampaignCharacters
-        {
-            Campaign_ID = campaignID,
-            Character_ID = lastCharacterID
-        });*/
+        // 3. Insert into CampaignCharacters
+        string insertCampaignCharacterQuery =
+            $"INSERT INTO CampaignCharacters (CampaignID, CharacterID) " +
+            $"VALUES ({campaignID}, {lastCharacterID});";
+
+        this.database.Query<CampaignCharacters>(insertCampaignCharacterQuery);
+        */
 
         Debug.Log($"Added New Character Entry: {charName}");
     }
 
+
     public void AddActionDataEntry(int characterID, string aName, string aDesc)
     {
-        this.database.Insert(new Action_Data
-        {
-            Action_Name = aName,
-            Action_Description = aDesc
-        });
+        // Escape strings
+        string safeName = aName.Replace("'", "''");
+        string safeDesc = aDesc.Replace("'", "''");
 
-        var lastActionEntry = this.database.Table<Action_Data>().OrderByDescending(x => x.Action_ID).FirstOrDefault();
+        // 1. Insert into Action_Data
+        string insertActionQuery =
+            $"INSERT INTO Actions (ActionName, ActionDescription) " +
+            $"VALUES ('{safeName}', '{safeDesc}');";
+
+        this.database.Query<Action_Data>(insertActionQuery);
+
+        // 2. Get last Action_ID
+        string getLastActionQuery =
+            "SELECT * FROM Actions ORDER BY ActionID DESC LIMIT 1;";
+
+        var lastActionEntry = this.database.Query<Action_Data>(getLastActionQuery).FirstOrDefault();
         int lastActionID = lastActionEntry.Action_ID;
 
-        this.database.Insert (new CharacterActions
-        {
-            Character_ID = characterID,
-            Action_ID = lastActionID
-        });
+        // 3. Insert into CharacterActions
+        string insertCharacterActionQuery =
+            $"INSERT INTO CharacterActions (CharacterID, ActionID) " +
+            $"VALUES ({characterID}, {lastActionID});";
+
+        this.database.Query<CharacterActions>(insertCharacterActionQuery);
 
         Debug.Log($"Added New Action Data Entry: {aName}");
     }
 
     public void AddItemDataEntry(int characterID, string iName, string iDesc, int itemQuantity)
     {
-        this.database.Insert(new Item_Data
-        {
-            Item_Name = iName,
-            Item_Description = iDesc
-        });
+        // Escape strings
+        string safeName = iName.Replace("'", "''");
+        string safeDesc = iDesc.Replace("'", "''");
 
-        var lastItemEntry = this.database.Table<Item_Data>().OrderByDescending(x => x.Item_ID).FirstOrDefault();
+        // 1. Insert into Item_Data
+        string insertItemQuery =
+            $"INSERT INTO Items (ItemName, ItemDescription) " +
+            $"VALUES ('{safeName}', '{safeDesc}');";
+
+        this.database.Query<Item_Data>(insertItemQuery);
+
+        // 2. Get last Item_ID
+        string getLastItemQuery =
+            "SELECT * FROM Items ORDER BY ItemID DESC LIMIT 1;";
+
+        var lastItemEntry = this.database.Query<Item_Data>(getLastItemQuery).FirstOrDefault();
         int lastItemID = lastItemEntry.Item_ID;
 
-        this.database.Insert(new CharacterItems
-        {
-            Character_ID = characterID,
-            Item_ID = lastItemID,
-            Quantity = itemQuantity
-        });
+        // 3. Insert into CharacterItems
+        string insertCharacterItemQuery =
+            $"INSERT INTO CharacterItems (CharacterID, ItemID, Quantity) " +
+            $"VALUES ({characterID}, {lastItemID}, {itemQuantity});";
 
-        Debug.Log($"Added New Action Data Entry: {iName}");
+        this.database.Query<CharacterItems>(insertCharacterItemQuery);
+
+        Debug.Log($"Added New Item Data Entry: {iName}");
     }
+
+
+
 
 
     private void CreateTable<T>(SQLiteConnection db)

@@ -11,15 +11,15 @@ namespace Assets.Scripts.Relations
     public class SessionLogEntries
     {
         [PrimaryKey]
-        [Column("Relation ID")]
+        [Column("RelationID")]
         public int Relation_ID
         { get; set; }
 
-        [Column("Session ID")]
+        [Column("SessionID")]
         public int Session_ID
         { get; set; }
 
-        [Column("Log ID")]
+        [Column("LogID")]
         public int Log_ID
         { get; set; }
     }
