@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine.Windows;
 using Assets.Scripts.Data_Classes;
 using Unity.VisualScripting;
+using Assets.Scripts.Relations;
 
 namespace Assets.Scripts.Queries
 {
@@ -28,6 +29,12 @@ namespace Assets.Scripts.Queries
         [Header("Session Inputs")]
         [SerializeField]
         private TMP_InputField s_if_campaignID;
+
+        [Header("Logs Inputs")]
+        [SerializeField]
+        private TMP_InputField l_if_campaignID;
+        [SerializeField]
+        private TMP_InputField l_if_sessionID;
 
         void Start()
         {
@@ -69,7 +76,7 @@ namespace Assets.Scripts.Queries
             {
                 if (camp_id_exists)
                 {
-                    where_condition += " OR ";
+                    where_condition += " AND ";
                 }
 
                 where_condition += "P.PlayerID = " + curr_player_id;
@@ -191,6 +198,79 @@ namespace Assets.Scripts.Queries
             }
 
             Debug.Log(to_print);
+
+            this.UpdateText(to_print);
+        }
+
+        public void OnFilterLogs()
+        {
+            int curr_camp_id, curr_session_id;
+            bool camp_id_exists = false, sess_id_exists = false;
+
+            string where_condition = "WHERE ";
+
+            //getting campaign ID
+            if (int.TryParse(l_if_campaignID.text, out curr_camp_id))
+            {
+                camp_id_exists = true;
+                where_condition += $"C.CampaignID = {curr_camp_id}";
+            }
+            else
+            {
+                Debug.LogWarning("Invalid input: '" + l_if_campaignID.text + "' cannot be converted to an integer.");
+            }
+
+            //getting session ID
+            if (int.TryParse(l_if_sessionID.text, out curr_session_id))
+            {
+                if (camp_id_exists)
+                    where_condition += " AND ";
+
+                where_condition += $"S.SessionID = {curr_session_id}";
+                sess_id_exists = true;
+            }
+            else
+            {
+                Debug.LogWarning("Invalid input: '" + l_if_campaignID.text + "' cannot be converted to an integer.");
+            }
+
+            if (!camp_id_exists && !sess_id_exists)
+            {
+                this._Query_Data_Viewer_Handler.OnLogsDataView();
+            }
+
+            string query_string =
+                "SELECT C.CampaignID, SLE.SessionID, L.LogID, Description0\r\n" +
+                "FROM Campaigns C\r\n" +
+                "INNER JOIN CampaignSessions CS ON C.CampaignID = CS.CampaignID\r\n" +
+                "INNER JOIN Session_Logs S ON CS.SessionID = S.SessionID\r\n" +
+                "INNER JOIN SessionLogEntries SLE ON S.SessionID = SLE.SessionID\r\n" +
+                "INNER JOIN Log_Entries L ON SLE.LogID = L.LogID\r\n" +
+                where_condition
+                ;
+
+            var log_results = database.Query<Log_Entry_Data>(
+                query_string
+                );
+
+            var sle_results = database.Query<SessionLogEntries>(
+                query_string
+                );
+
+            var camp_results = database.Query<CampaignData>(
+                query_string
+                );
+
+            string to_print = "";
+
+            for (int i = 0; i < log_results.Count; i++)
+            {
+                to_print +=
+                    $"Campaign ID: {camp_results[i].Campaign_ID} // Session ID: {sle_results[i].Session_ID} // Log ID: {log_results[i].Log_ID} // Desc 0: {log_results[i].Desc0}\r\n"
+                    ;
+            }
+
+            //Debug.Log(to_print);
 
             this.UpdateText(to_print);
         }

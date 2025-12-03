@@ -96,12 +96,25 @@ namespace Assets.Scripts.Queries
 
         public void OnLogsDataView()
         {
+            string query_string =
+                "SELECT C.CampaignID, SLE.SessionID, L.LogID, Description0\r\n" +
+                "FROM Campaigns C\r\n" +
+                "INNER JOIN CampaignSessions CS ON C.CampaignID = CS.CampaignID\r\n" +
+                "INNER JOIN Session_Logs S ON CS.SessionID = S.SessionID\r\n" +
+                "INNER JOIN SessionLogEntries SLE ON S.SessionID = SLE.SessionID\r\n" +
+                "INNER JOIN Log_Entries L ON SLE.LogID = L.LogID"
+                ;
+
             var log_results = database.Query<Log_Entry_Data>(
-                "SELECT SLE.SessionID, L.LogID, Description0 \r\nFROM SessionLogEntries SLE, Log_Entries L\r\nWHERE SLE.LogID = L.LogID"
+                query_string
                 );
 
             var sle_results = database.Query<SessionLogEntries>(
-                "SELECT SLE.SessionID, L.LogID, Description0 \r\nFROM SessionLogEntries SLE, Log_Entries L\r\nWHERE SLE.LogID = L.LogID"
+                query_string
+                );
+
+            var camp_results = database.Query<CampaignData>(
+                query_string
                 );
 
             string to_print = "";
@@ -109,7 +122,7 @@ namespace Assets.Scripts.Queries
             for (int i = 0; i < log_results.Count; i++)
             {
                 to_print +=
-                    $"Session ID: {sle_results[i].Session_ID} // Log ID: {log_results[i].Log_ID} // Desc 0: {log_results[i].Desc0}\r\n"
+                    $"Campaign ID: {camp_results[i].Campaign_ID} // Session ID: {sle_results[i].Session_ID} // Log ID: {log_results[i].Log_ID} // Desc 0: {log_results[i].Desc0}\r\n"
                     ;
             }
 
