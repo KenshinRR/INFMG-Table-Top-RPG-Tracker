@@ -36,6 +36,10 @@ namespace Assets.Scripts.Queries
         [SerializeField]
         private TMP_InputField l_if_sessionID;
 
+        [Header("Player Inputs")]
+        [SerializeField]
+        private TMP_InputField p_if_campaignID;
+
         void Start()
         {
             string file_loc = Application.dataPath + "/Database/MyDb.db";
@@ -273,6 +277,50 @@ namespace Assets.Scripts.Queries
             //Debug.Log(to_print);
 
             this.UpdateText(to_print);
+        }
+
+        public void OnFilterPlayer()
+        {
+            int curr_camp_id;
+
+            //getting player ID
+            if (int.TryParse(p_if_campaignID.text, out curr_camp_id) == false)
+            {
+                Debug.LogWarning("Invalid input: '" + p_if_campaignID.text + "' cannot be converted to an integer.");
+                this._Query_Data_Viewer_Handler.OnPlayerDataView();
+                return;
+            }
+
+            string query_string =
+                "SELECT C.CampaignID, P.PlayerID, P.PlayerName\r\n" +
+                "FROM Campaigns C\r\n" +
+                "INNER JOIN CampaignPlayers CaP ON C.CampaignID = CaP.CampaignID\r\n" +
+                "INNER JOIN Players P ON CaP.PlayerID = P.PlayerID\r\n" +
+                $"WHERE C.CampaignID = {curr_camp_id}"
+                ;
+
+            var p_results = database.Query<PlayerData>(
+                query_string
+                );
+
+            var camp_results = database.Query<CampaignData>(
+                query_string
+                );
+
+            string to_print = "";
+
+            for (int i = 0; i < p_results.Count; i++)
+            {
+                to_print +=
+                    $"Campaign ID: {camp_results[i].Campaign_ID} // Player ID: {p_results[i].Player_ID} // Name: {p_results[i].Player_Name}"
+                    + "\r\n"
+                    ;
+            }
+
+            //Debug.Log(to_print);
+
+            this.UpdateText(to_print);
+
         }
     }
 }

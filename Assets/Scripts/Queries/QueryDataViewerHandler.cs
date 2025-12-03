@@ -43,29 +43,39 @@ namespace Assets.Scripts.Queries
             }
 
             //replace debug to sending the text to the text UI
-            Debug.Log(to_print);
+            //Debug.Log(to_print);
 
             this.UpdateText(to_print);
         }
 
         public void OnPlayerDataView()
         {
-            var results = database.Query<PlayerData>(
-                "SELECT PlayerID, PlayerName FROM Players"
+            string query_string =
+                "SELECT C.CampaignID, P.PlayerID, P.PlayerName\r\n" +
+                "FROM Campaigns C\r\n" +
+                "INNER JOIN CampaignPlayers CaP ON C.CampaignID = CaP.CampaignID\r\n" +
+                "INNER JOIN Players P ON CaP.PlayerID = P.PlayerID"
+                ;
+
+            var p_results = database.Query<PlayerData>(
+                query_string
+                );
+
+            var camp_results = database.Query<CampaignData>(
+                query_string
                 );
 
             string to_print = "";
 
-            foreach (PlayerData playerData in results)
+            for (int i = 0;  i < p_results.Count; i++)
             {
                 to_print +=
-                    "ID: " + playerData.Player_ID
-                    + " // Name: " + playerData.Player_Name
-                    + "\n"
+                    $"Campaign ID: {camp_results[i].Campaign_ID} // Player ID: {p_results[i].Player_ID} // Name: {p_results[i].Player_Name}"
+                    + "\r\n"
                     ;
             }
 
-            Debug.Log(to_print);
+            //Debug.Log(to_print);
 
             this.UpdateText(to_print);
         }
