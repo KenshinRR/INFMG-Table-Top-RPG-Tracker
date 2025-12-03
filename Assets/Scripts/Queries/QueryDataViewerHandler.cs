@@ -187,6 +187,39 @@ namespace Assets.Scripts.Queries
             this.UpdateText(to_print);
         }
 
+        public void OnCharacterDataView()
+        {
+            var ch_results = database.Query<CharacterData>(
+                "SELECT CaP.CampaignID, PC.PlayerID, Ch.CharacterID, Ch.CharacterType, Ch.CharacterName\r\n" +
+                "FROM Characters Ch\r\n" +
+                "INNER JOIN PlayerCharacters PC ON Ch.CharacterID = PC.CharacterID\r\n" +
+                "INNER JOIN CampaignPlayers CaP ON CaP.PlayerID = PC.PlayerID"
+                );
+
+            var cap_results = database.Query<CampaignPlayers>(
+                "SELECT CaP.CampaignID, PC.PlayerID, Ch.CharacterID, Ch.CharacterType, Ch.CharacterName\r\n" +
+                "FROM Characters Ch\r\n" +
+                "INNER JOIN PlayerCharacters PC ON Ch.CharacterID = PC.CharacterID\r\n" +
+                "INNER JOIN CampaignPlayers CaP ON CaP.PlayerID = PC.PlayerID"
+                );
+
+            string to_print = "";
+
+            for (int i = 0;  i < ch_results.Count; i++)
+            {
+                to_print +=
+                    $"Campaign ID: {cap_results[i].Campaign_ID} // Player ID: {cap_results[i].Player_ID}" +
+                    $"// Character ID: {ch_results[i].Character_ID} // Character Type: {ch_results[i].Character_Type}" +
+                    $"// Character Name: {ch_results[i].Character_Name}" +
+                    "\r\n"
+                    ;
+            }
+
+            //Debug.Log(to_print);
+
+            this.UpdateText(to_print);
+        }
+
         public void AssignTextLabel(TextMeshProUGUI current_label)
         {
             this._label = current_label;

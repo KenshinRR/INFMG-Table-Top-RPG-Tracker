@@ -40,6 +40,12 @@ namespace Assets.Scripts.Queries
         [SerializeField]
         private TMP_InputField p_if_campaignID;
 
+        [Header("Character Inputs")]
+        [SerializeField]
+        private TMP_InputField ch_if_campaignID;
+        [SerializeField]
+        private TMP_InputField ch_if_playerID;
+
         void Start()
         {
             string file_loc = Application.dataPath + "/Database/MyDb.db";
@@ -143,7 +149,7 @@ namespace Assets.Scripts.Queries
             for (int i = 0; i < player_results.Count; i++)
             {
                 to_print +=
-                    $"Campaign ID: {camp_results[i].Campaign_ID} // Campaign Name: {camp_results[i].Campaign_Name} // " +
+                    $"= Campaign ID: {camp_results[i].Campaign_ID} // Campaign Name: {camp_results[i].Campaign_Name} // " +
                     $"Player ID: {player_results[i].Player_ID} // Player Name: {player_results[i].Player_Name}"
                     ;
             }
@@ -196,7 +202,7 @@ namespace Assets.Scripts.Queries
             for (int i = 0; i < sl_results.Count; i++)
             {
                 to_print +=
-                    $"Campaign ID: {camp_results[i].Campaign_ID} // Session ID: {sl_results[i].Session_ID} // Date: {sl_results[i].Date}\r\n"
+                    $"= Campaign ID: {camp_results[i].Campaign_ID} // Session ID: {sl_results[i].Session_ID} // Date: {sl_results[i].Date}\r\n"
                     ;
             }
 
@@ -269,7 +275,7 @@ namespace Assets.Scripts.Queries
             for (int i = 0; i < log_results.Count; i++)
             {
                 to_print +=
-                    $"Campaign ID: {camp_results[i].Campaign_ID} // Session ID: {sle_results[i].Session_ID} // Log ID: {log_results[i].Log_ID} // Desc 0: {log_results[i].Desc0}\r\n"
+                    $"= Campaign ID: {camp_results[i].Campaign_ID} // Session ID: {sle_results[i].Session_ID} // Log ID: {log_results[i].Log_ID} // Desc 0: {log_results[i].Desc0}\r\n"
                     ;
             }
 
@@ -311,7 +317,7 @@ namespace Assets.Scripts.Queries
             for (int i = 0; i < p_results.Count; i++)
             {
                 to_print +=
-                    $"Campaign ID: {camp_results[i].Campaign_ID} // Player ID: {p_results[i].Player_ID} // Name: {p_results[i].Player_Name}"
+                    $"= Campaign ID: {camp_results[i].Campaign_ID} // Player ID: {p_results[i].Player_ID} // Name: {p_results[i].Player_Name}"
                     + "\r\n"
                     ;
             }
@@ -320,6 +326,105 @@ namespace Assets.Scripts.Queries
 
             this.UpdateText(to_print);
 
+        }
+
+        public void OnFilterCharacter()
+        {
+            int curr_camp_id, curr_player_id;
+            bool camp_found = false, player_found = false;
+
+            //getting campaign ID
+            if (int.TryParse(ch_if_campaignID.text, out curr_camp_id))
+            {
+                camp_found=true;
+            }
+            else
+            {
+                Debug.LogWarning("Invalid input: '" + ch_if_campaignID.text + "' cannot be converted to an integer.");
+            }
+
+            //getting player ID
+            if (int.TryParse(ch_if_playerID.text, out curr_player_id))
+            {
+                player_found=true;
+            }
+            else
+            {
+                Debug.LogWarning("Invalid input: '" + ch_if_playerID.text + "' cannot be converted to an integer.");
+            }
+
+            if (!camp_found && !player_found)
+            {
+                this._Query_Data_Viewer_Handler.OnCharacterDataView();
+                return;
+            }
+
+            string query_string = "", to_print = "";
+
+            if (camp_found)
+            {
+                string where_and = "";
+                if (player_found)
+                    where_and = $" AND PC.PlayerID = {curr_player_id}";
+
+                query_string =
+                    "SELECT CaP.CampaignID, Ch.CharacterID, Ch.CharacterType, Ch.CharacterName\r\n" +
+                    "FROM Characters Ch\r\n" +
+                    "INNER JOIN PlayerCharacters PC ON Ch.CharacterID = PC.CharacterID\r\n" +
+                    "INNER JOIN CampaignPlayers CaP ON CaP.PlayerID = PC.PlayerID\r\n" +
+                    $"WHERE CaP.CampaignID = {curr_camp_id}" + where_and
+                    ;
+
+                var CaP_results = database.Query<CampaignPlayers>(
+                query_string
+                );
+
+                var Ch_results = database.Query<CharacterData>(
+                query_string
+                );
+
+                string player_id_string = "";
+
+                for ( int i = 0; i < CaP_results.Count; i++ )
+                {
+                    if (player_found)
+                        player_id_string = $"// Player ID: {curr_player_id}";
+
+                    to_print +=
+                        $"= Campaign ID: {CaP_results[i].Campaign_ID} " +
+                        player_id_string +
+                        $"// Character ID: {Ch_results[i].Character_ID} // " +
+                        $"Character Type: {Ch_results[i].Character_Type} // Character Name: {Ch_results[i].Character_Name}"
+                        ;
+                }
+            }
+            else if (player_found)
+            {
+                query_string =
+                    "SELECT PC.PlayerID, Ch.CharacterID, Ch.CharacterType, Ch.CharacterName\r\n" +
+                    "FROM Characters Ch\r\n" +
+                    "INNER JOIN PlayerCharacters PC ON Ch.CharacterID = PC.CharacterID\r\n" +
+                    $"WHERE PC.PlayerID = {curr_player_id}"
+                    ;
+
+                var pc_results = database.Query<PlayerCharacters>(
+                query_string
+                );
+
+                var Ch_results = database.Query<CharacterData>(
+                query_string
+                );
+
+                for (int i = 0; i < pc_results.Count; i++)
+                {
+                    to_print +=
+                        $"= Player ID: {pc_results[i].Player_ID} // Character ID: {Ch_results[i].Character_ID} // " +
+                        $"Character Type: {Ch_results[i].Character_Type} // Character Name: {Ch_results[i].Character_Name}"
+                        ;
+                }
+            }
+
+            this.UpdateText(to_print);
         }
     }
 }
