@@ -7,6 +7,7 @@ using UnityEngine;
 using SQLite;
 using Assets.Scripts.Data_Classes;
 using TMPro;
+using Assets.Scripts.Relations;
 
 namespace Assets.Scripts.Queries
 {
@@ -93,18 +94,20 @@ namespace Assets.Scripts.Queries
 
         public void OnLogsDataView()
         {
-            var results = database.Query<Log_Entry_Data>(
-                "SELECT LogID, Description0 FROM Log_Entries"
+            var log_results = database.Query<Log_Entry_Data>(
+                "SELECT SLE.SessionID, L.LogID, Description0 \r\nFROM SessionLogEntries SLE, Log_Entries L\r\nWHERE SLE.LogID = L.LogID"
+                );
+
+            var sle_results = database.Query<SessionLogEntries>(
+                "SELECT SLE.SessionID, L.LogID, Description0 \r\nFROM SessionLogEntries SLE, Log_Entries L\r\nWHERE SLE.LogID = L.LogID"
                 );
 
             string to_print = "";
 
-            foreach (Log_Entry_Data logData in results)
+            for (int i = 0; i < log_results.Count; i++)
             {
                 to_print +=
-                    "ID: " + logData.Log_ID
-                    + " // Desc 0: " + logData.Desc0
-                    + "\n"
+                    $"Session ID: {sle_results[i].Session_ID} // Log ID: {log_results[i].Log_ID} // Desc 0: {log_results[i].Desc0}\r\n"
                     ;
             }
 
