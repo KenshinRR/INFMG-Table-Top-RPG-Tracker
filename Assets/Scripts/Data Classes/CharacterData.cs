@@ -23,60 +23,24 @@ namespace Assets.Scripts.Data_Classes
         public string Character_Name
         { get; set; }
 
-        [Column("Backstory")]
-        public string Backstory
-        { get; set; }
-
-        [Column("Alignment")]
-        public string Alignment
-        { get; set; }
-
-        [Column("Race")]
-        public string Race
-        { get; set; }
-
-        [Column("Class")]
-        public string Class
+        [Column("Level")]
+        public int Level
         { get; set; }
 
         [Column("Strength")]
         public int Strength
         { get; set; }
 
-        [Column("Dexterity")]
-        public int Dexterity
-        { get; set; }
-
-        [Column("Constitution")]
-        public int Constitution
-        { get; set; }
-
-        [Column("Intelligence")]
-        public int Intelligence
-        { get; set; }
-
-        [Column("Charisma")]
-        public int Charisma
-        { get; set; }
-
-        [Column("Armor Class")]
-        public int Armor_Class
+        [Column("Vitality")]
+        public int Vitality
         { get; set; }
 
         [Column("Speed")]
         public int Speed
         { get; set; }
 
-        [Column("Hitpoints")]
-        public int Hitpoints
-        { get; set; }
-
-        [Column("ExperiencePoints")]
-        public int Experience_Points
-        { get; set; }
-
-        [Column("CharacterLevel")]
-        public int Character_Level
+        [Column("Defence")]
+        public int Defence
         { get; set; }
     }
 }
