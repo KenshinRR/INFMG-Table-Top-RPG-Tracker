@@ -11,16 +11,16 @@ namespace Assets.Scripts.Relations
     public class CampaignPlayers
     {
         [PrimaryKey]
-        [Column("Relation ID")]
+        [Column("RelationID")]
         public int Relation_ID
         { get; set; }
 
 
-        [Column("Campaign ID")]
+        [Column("CampaignID")]
         public int Campaign_ID
         { get; set; }
 
-        [Column("Player ID")]
+        [Column("PlayerID")]
         public int Player_ID
         { get; set; }
     }

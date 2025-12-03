@@ -7,15 +7,15 @@ using UnityEngine;
 public class CampaignData
 {
     [PrimaryKey, AutoIncrement]
-    [Column("Campaign ID")]
+    [Column("CampaignID")]
     public int Campaign_ID
     { get; set; }
 
-    [Column("Campaign Name")]
+    [Column("CampaignName")]
     public string Campaign_Name
     { get; set; }
 
-    [Column("Rule System")]
+    [Column("RuleSystem")]
     public string RuleSystem
     { get; set; }
 
