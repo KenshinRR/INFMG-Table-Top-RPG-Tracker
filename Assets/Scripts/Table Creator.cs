@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 public class TableCreator : MonoBehaviour
 {
     public SQLiteConnection database = null;
@@ -14,7 +15,7 @@ public class TableCreator : MonoBehaviour
         // 1. Create a connection to the database.
         // The special ":memory:" in-memory database and
         // URIs like "file:///somefile" are also supported
-        string file_loc = Application.dataPath + "/Database/MyDb.db";
+        string file_loc = Application.dataPath + "/Database/Database.db";
         this.database = new SQLiteConnection(file_loc);
         Debug.Log($"Database file at {file_loc}");
 
@@ -35,10 +36,36 @@ public class TableCreator : MonoBehaviour
         this.CreateTable<PlayerCharacters>(this.database);
 
     }
+
     public void callAddCampaignDataEntry(string name, string ruleSystem)
     {
         this.AddCampaignDataEntry(this.database, name, ruleSystem);
     }
+
+    public void AddPlayerDataEntry(int campaignID, string name)
+    {
+        string query =
+            $"INSERT INTO Players (PlayerName) " +
+            $"VALUES ('{name}');";
+
+        this.database.Query<PlayerData>(query);
+
+        string getLastSessionQuery =
+        "SELECT * FROM Players ORDER BY PlayerID DESC LIMIT 1;";
+
+        var lastSessionEntry = database.Query<PlayerData>(getLastSessionQuery).FirstOrDefault();
+
+        int lastSessionID = lastSessionEntry.Player_ID;
+
+        string insertCampaignSessionQuery =
+            $"INSERT INTO CampaignPlayers (CampaignID, PlayerID) " +
+            $"VALUES ({campaignID}, {lastSessionID});";
+
+        database.Query<CampaignPlayers>(insertCampaignSessionQuery);
+
+        Debug.Log($"Added Player entry: {name}");
+    }
+
     public void AddCampaignDataEntry(SQLiteConnection db, string name, string ruleSystem)
     {
         string query =
@@ -53,7 +80,7 @@ public class TableCreator : MonoBehaviour
     public void AddSessionLogDataEntry(int campaignID, float duration, string summary)
     {
         // Sanitize string values to avoid SQL errors if they contain single quotes
-        string safeDate = System.DateTime.Today.ToString().Replace("'", "''");
+        string safeDate = System.DateTime.Now.ToString().Replace("'", "''");
         string safeSummary = summary.Replace("'", "''");
 
         string insertSessionQuery =
@@ -107,64 +134,48 @@ public class TableCreator : MonoBehaviour
 
         Debug.Log("Added New Log Entry Data");
     }
+
+
     public void AddCharacterDataEntry(
+        int playerID,
         string charType,
         string charName,
-        string backstory,
-        string alignment,
-        string race,
-        string charClass,
-        int strength,
-        int dexterity,
-        int constitution,
-        int intelligence,
-        int charisma,
-        int armorClass,
-        int speed,
-        int hitpoints,
-        int experiencePoints,
-        int level)
+        int level,
+        int str,
+        int vit,
+        int spd,
+        int def)
     {
-        // Escape all string inputs to prevent SQL errors from single quotes
+        // Escape names for safety
         string safeType = charType.Replace("'", "''");
         string safeName = charName.Replace("'", "''");
-        string safeBackstory = backstory.Replace("'", "''");
-        string safeAlignment = alignment.Replace("'", "''");
-        string safeRace = race.Replace("'", "''");
-        string safeClass = charClass.Replace("'", "''");
 
-        // 1. Insert CharacterData entry
-        string insertCharacterQuery =
+        string insertQuery =
             "INSERT INTO Characters (" +
-            "Character_Type, Character_Name, Backstory, Alignment, Race, Class, " +
-            "Strength, Dexterity, Constitution, Intelligence, Charisma, " +
-            "Armor_Class, Speed, Hitpoints, ExperiencePoints, CharacterLevel" +
+            "CharacterType, CharacterName, Level, Strength, Vitality, Speed, Defence" +
             ") VALUES (" +
-            $"'{safeType}', '{safeName}', '{safeBackstory}', '{safeAlignment}', '{safeRace}', '{safeClass}', " +
-            $"{strength}, {dexterity}, {constitution}, {intelligence}, {charisma}, " +
-            $"{armorClass}, {speed}, {hitpoints}, {experiencePoints}, {level}" +
+            $"'{safeType}', '{safeName}', {level}, {str}, {vit}, {spd}, {def}" +
             ");";
 
-        this.database.Query<CharacterData>(insertCharacterQuery);
+        this.database.Query<CharacterData>(insertQuery);
 
-        /*
-        // 2. Retrieve last inserted Character_ID
         string getLastCharacterQuery =
             "SELECT * FROM Characters ORDER BY CharacterID DESC LIMIT 1;";
 
         var lastCharacterEntry = this.database.Query<CharacterData>(getLastCharacterQuery).FirstOrDefault();
         int lastCharacterID = lastCharacterEntry.Character_ID;
 
-        // 3. Insert into CampaignCharacters
-        string insertCampaignCharacterQuery =
-            $"INSERT INTO CampaignCharacters (CampaignID, CharacterID) " +
-            $"VALUES ({campaignID}, {lastCharacterID});";
+        string insertPlayerCharactersQuery =
+            $"INSERT INTO PlayerCharacters (PlayerID, CharacterID) " +
+            $"VALUES ({playerID}, {lastCharacterID});";
 
-        this.database.Query<CampaignCharacters>(insertCampaignCharacterQuery);
-        */
+        this.database.Query<PlayerCharacters>(insertPlayerCharactersQuery);
 
         Debug.Log($"Added New Character Entry: {charName}");
     }
+
+
+
     public void AddActionDataEntry(int characterID, string aName, string aDesc)
     {
         // Escape strings
@@ -224,6 +235,10 @@ public class TableCreator : MonoBehaviour
 
         Debug.Log($"Added New Item Data Entry: {iName}");
     }
+
+
+
+
 
     private void CreateTable<T>(SQLiteConnection db)
     {
