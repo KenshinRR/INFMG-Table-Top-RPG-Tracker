@@ -7,7 +7,7 @@ public class CreateCampaignDataEntry : MonoBehaviour
 {
     [SerializeField] public TableCreator tableCreator;
 
-    [SerializeField] public TMP_Text campaignNameText;
+    [SerializeField] public TMP_InputField campaignNameText;
     [SerializeField] public TMP_Text ruleSystemText;
 
     [SerializeField] public string campaignName = "Epic Adventure";

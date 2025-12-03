@@ -5,14 +5,14 @@ public class CreateLogEntryData : MonoBehaviour
 {
     [SerializeField] public TableCreator tableCreator;
 
-    [SerializeField] public TMP_Text SessionIDText;
+    [SerializeField] public TMP_InputField SessionIDText;
     [SerializeField] public SessionLogData sessionLogData = null;
     [SerializeField] private bool sessionLogDataAssigned = false;
 
-    [SerializeField] public TMP_Text Desc0Text;
-    [SerializeField] public TMP_Text Desc1Text;
-    [SerializeField] public TMP_Text DiceText;
-    [SerializeField] public TMP_Text DiceResultText;
+    [SerializeField] public TMP_InputField Desc0Text;
+    [SerializeField] public TMP_InputField Desc1Text;
+    [SerializeField] public TMP_InputField DiceText;
+    [SerializeField] public TMP_InputField DiceResultText;
 
     [SerializeField] public string Desc0 = "Epic Adventure";
     [SerializeField] public string Desc1 = "Dungeons & Dragons 5e";
@@ -57,6 +57,8 @@ public class CreateLogEntryData : MonoBehaviour
 
     public void CreateLogEntry()
     {
+        AssignSessionLogData();
+
         if (sessionLogDataAssigned == false || sessionLogData == null)
         {
             Debug.LogError("SessionLogData not assigned in CreateLogEntryData script.");
