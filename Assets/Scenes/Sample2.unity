@@ -16172,6 +16172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 221024875}
   - component: {fileID: 221024874}
+  - component: {fileID: 221024877}
   - component: {fileID: 221024876}
   m_Layer: 0
   m_Name: Data View Handler
@@ -16220,6 +16221,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _do_it: 0
+--- !u!114 &221024877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221024873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecbcbff0fd13d454490c0cd5583b9347, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  if_campaignID: {fileID: 158533125}
+  if_playerID: {fileID: 1213708776}
 --- !u!1 &222860156
 GameObject:
   m_ObjectHideFlags: 0
@@ -89310,7 +89325,7 @@ GameObject:
   - component: {fileID: 1471395869}
   - component: {fileID: 1471395868}
   m_Layer: 5
-  m_Name: Exit Button (7)
+  m_Name: Search Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89382,12 +89397,37 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 795675784}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: toggleMenu
-        m_Mode: 3
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024873}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024877}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.FilterDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: OnFilterCampaigns
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

@@ -27,13 +27,13 @@ public class SQLCommanderHelper : MonoBehaviour
             _do_it = false;
 
             string query =
-                $"INSERT INTO Actions (Action_Name, Action_Description) " +
-                $"VALUES ('Yell', 'Causes another person to move faster');";
+                $"INSERT INTO CampaignPlayers (CampaignID, PlayerID) " +
+                $"VALUES ('0', '1');";
 
-            database.Query<Action_Data>(query);
+            database.Query<CampaignPlayers>(query);
 
 
-            Debug.Log($"Added Action entry: Yell");
+            Debug.Log($"Added new entry");
         }
     }
 }

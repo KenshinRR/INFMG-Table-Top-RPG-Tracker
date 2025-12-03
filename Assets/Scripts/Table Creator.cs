@@ -28,9 +28,11 @@ public class TableCreator : MonoBehaviour
 
         //Relations Tables
         this.CreateTable<CampaignSessions>(this.database);
+        this.CreateTable<CampaignPlayers>(this.database);
         this.CreateTable<SessionLogEntries>(this.database);
         this.CreateTable<CharacterItems>(this.database);
         this.CreateTable<CharacterActions>(this.database);
+        this.CreateTable<PlayerCharacters>(this.database);
 
     }
 
