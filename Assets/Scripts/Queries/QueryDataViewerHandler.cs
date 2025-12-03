@@ -43,47 +43,59 @@ namespace Assets.Scripts.Queries
             }
 
             //replace debug to sending the text to the text UI
-            Debug.Log(to_print);
+            //Debug.Log(to_print);
 
             this.UpdateText(to_print);
         }
 
         public void OnPlayerDataView()
         {
-            var results = database.Query<PlayerData>(
-                "SELECT PlayerID, PlayerName FROM Players"
+            string query_string =
+                "SELECT C.CampaignID, P.PlayerID, P.PlayerName\r\n" +
+                "FROM Campaigns C\r\n" +
+                "INNER JOIN CampaignPlayers CaP ON C.CampaignID = CaP.CampaignID\r\n" +
+                "INNER JOIN Players P ON CaP.PlayerID = P.PlayerID"
+                ;
+
+            var p_results = database.Query<PlayerData>(
+                query_string
+                );
+
+            var camp_results = database.Query<CampaignData>(
+                query_string
                 );
 
             string to_print = "";
 
-            foreach (PlayerData playerData in results)
+            for (int i = 0;  i < p_results.Count; i++)
             {
                 to_print +=
-                    "ID: " + playerData.Player_ID
-                    + " // Name: " + playerData.Player_Name
-                    + "\n"
+                    $"Campaign ID: {camp_results[i].Campaign_ID} // Player ID: {p_results[i].Player_ID} // Name: {p_results[i].Player_Name}"
+                    + "\r\n"
                     ;
             }
 
-            Debug.Log(to_print);
+            //Debug.Log(to_print);
 
             this.UpdateText(to_print);
         }
 
         public void OnSessionDataView()
         {
-            var results = database.Query<SessionLogData>(
-                "SELECT SessionID, Date FROM Session_Logs"
+            var sl_results = database.Query<SessionLogData>(
+                "SELECT C.CampaignID, SL.SessionID, SL.Date \r\nFROM 'Campaigns' C, 'Session_Logs' SL, CampaignSessions CS\r\nWHERE C.CampaignID = CS.CampaignID\r\nAND SL.SessionID = CS.SessionID"
+                );
+
+            var camp_results = database.Query<CampaignData>(
+                "SELECT C.CampaignID, SL.SessionID, SL.Date \r\nFROM 'Campaigns' C, 'Session_Logs' SL, CampaignSessions CS\r\nWHERE C.CampaignID = CS.CampaignID\r\nAND SL.SessionID = CS.SessionID"
                 );
 
             string to_print = "";
 
-            foreach (SessionLogData sessionLog in results)
+            for (int i = 0; i < sl_results.Count; i++)
             {
                 to_print +=
-                    "ID: " + sessionLog.Session_ID
-                    + " // Date: " + sessionLog.Date
-                    + "\n"
+                    $"Campaign ID: {camp_results[i].Campaign_ID} // Session ID: {sl_results[i].Session_ID} // Date: {sl_results[i].Date}\r\n"
                     ;
             }
 
@@ -94,12 +106,25 @@ namespace Assets.Scripts.Queries
 
         public void OnLogsDataView()
         {
+            string query_string =
+                "SELECT C.CampaignID, SLE.SessionID, L.LogID, Description0\r\n" +
+                "FROM Campaigns C\r\n" +
+                "INNER JOIN CampaignSessions CS ON C.CampaignID = CS.CampaignID\r\n" +
+                "INNER JOIN Session_Logs S ON CS.SessionID = S.SessionID\r\n" +
+                "INNER JOIN SessionLogEntries SLE ON S.SessionID = SLE.SessionID\r\n" +
+                "INNER JOIN Log_Entries L ON SLE.LogID = L.LogID"
+                ;
+
             var log_results = database.Query<Log_Entry_Data>(
-                "SELECT SLE.SessionID, L.LogID, Description0 \r\nFROM SessionLogEntries SLE, Log_Entries L\r\nWHERE SLE.LogID = L.LogID"
+                query_string
                 );
 
             var sle_results = database.Query<SessionLogEntries>(
-                "SELECT SLE.SessionID, L.LogID, Description0 \r\nFROM SessionLogEntries SLE, Log_Entries L\r\nWHERE SLE.LogID = L.LogID"
+                query_string
+                );
+
+            var camp_results = database.Query<CampaignData>(
+                query_string
                 );
 
             string to_print = "";
@@ -107,7 +132,7 @@ namespace Assets.Scripts.Queries
             for (int i = 0; i < log_results.Count; i++)
             {
                 to_print +=
-                    $"Session ID: {sle_results[i].Session_ID} // Log ID: {log_results[i].Log_ID} // Desc 0: {log_results[i].Desc0}\r\n"
+                    $"Campaign ID: {camp_results[i].Campaign_ID} // Session ID: {sle_results[i].Session_ID} // Log ID: {log_results[i].Log_ID} // Desc 0: {log_results[i].Desc0}\r\n"
                     ;
             }
 
@@ -158,6 +183,39 @@ namespace Assets.Scripts.Queries
             }
 
             Debug.Log(to_print);
+
+            this.UpdateText(to_print);
+        }
+
+        public void OnCharacterDataView()
+        {
+            var ch_results = database.Query<CharacterData>(
+                "SELECT CaP.CampaignID, PC.PlayerID, Ch.CharacterID, Ch.CharacterType, Ch.CharacterName\r\n" +
+                "FROM Characters Ch\r\n" +
+                "INNER JOIN PlayerCharacters PC ON Ch.CharacterID = PC.CharacterID\r\n" +
+                "INNER JOIN CampaignPlayers CaP ON CaP.PlayerID = PC.PlayerID"
+                );
+
+            var cap_results = database.Query<CampaignPlayers>(
+                "SELECT CaP.CampaignID, PC.PlayerID, Ch.CharacterID, Ch.CharacterType, Ch.CharacterName\r\n" +
+                "FROM Characters Ch\r\n" +
+                "INNER JOIN PlayerCharacters PC ON Ch.CharacterID = PC.CharacterID\r\n" +
+                "INNER JOIN CampaignPlayers CaP ON CaP.PlayerID = PC.PlayerID"
+                );
+
+            string to_print = "";
+
+            for (int i = 0;  i < ch_results.Count; i++)
+            {
+                to_print +=
+                    $"Campaign ID: {cap_results[i].Campaign_ID} // Player ID: {cap_results[i].Player_ID}" +
+                    $"// Character ID: {ch_results[i].Character_ID} // Character Type: {ch_results[i].Character_Type}" +
+                    $"// Character Name: {ch_results[i].Character_Name}" +
+                    "\r\n"
+                    ;
+            }
+
+            //Debug.Log(to_print);
 
             this.UpdateText(to_print);
         }
