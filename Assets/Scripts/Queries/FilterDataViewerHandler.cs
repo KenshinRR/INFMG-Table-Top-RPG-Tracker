@@ -61,13 +61,13 @@ namespace Assets.Scripts.Queries
         public void OnFilterCampaigns()
         {
             int curr_campaign_id, curr_player_id;
-            string where_condition = "WHERE ";
+            //string where_condition = "WHERE ";
             bool camp_id_exists = false, player_id_exists = false;
 
             //getting campaign ID
             if (int.TryParse(c_if_campaignID.text, out curr_campaign_id))
             {
-                where_condition += "C.CampaignID = " + curr_campaign_id;
+                //where_condition += "C.CampaignID = " + curr_campaign_id;
                 camp_id_exists = true;
             }
             else
@@ -78,12 +78,12 @@ namespace Assets.Scripts.Queries
             //getting player ID
             if (int.TryParse(c_if_playerID.text, out curr_player_id))
             {
-                if (camp_id_exists)
-                {
-                    where_condition += " AND ";
-                }
+                //if (camp_id_exists)
+                //{
+                //    where_condition += " AND ";
+                //}
 
-                where_condition += "P.PlayerID = " + curr_player_id;
+                //where_condition += "P.PlayerID = " + curr_player_id;
                 player_id_exists = true;
             }
             else
@@ -101,45 +101,44 @@ namespace Assets.Scripts.Queries
                 return;
             }
 
+            string query_string = "";
+
+            if (camp_id_exists && !player_id_exists)
+            {
+                query_string = $"SELECT * FROM 'Campaigns' WHERE CampaignID = {curr_campaign_id}";
+            }
+            else if (!camp_id_exists && player_id_exists)
+            {
+                query_string = $"SELECT DISTINCT C.CampaignID, CampaignName, P.PlayerID\r\n" +
+                    "FROM Campaigns C\r\n" +
+                    "INNER JOIN CampaignSessions CS ON C.CampaignID = CS.CampaignID\r\n" +
+                    "INNER JOIN CampaignPlayers CaP ON CS.CampaignID = CaP.CampaignID\r\n" +
+                    "INNER JOIN Players P ON CaP.PlayerID = P.PlayerID\r\n" +
+                    $"WHERE P.PlayerID = {curr_player_id}";
+            }
+            else if (camp_id_exists && player_id_exists)
+            {
+                query_string =
+                    "SELECT DISTINCT C.CampaignID, CampaignName, P.PlayerID\r\n" +
+                    "FROM Campaigns C\r\n" +
+                    "INNER JOIN CampaignSessions CS ON C.CampaignID = CS.CampaignID\r\n" +
+                    "INNER JOIN CampaignPlayers CaP ON CS.CampaignID = CaP.CampaignID\r\n" +
+                    "INNER JOIN Players P ON CaP.PlayerID = P.PlayerID\r\n" +
+                    $"WHERE P.PlayerID = {curr_player_id}\r\nAND C.CampaignID = {curr_campaign_id}"
+                    ;
+            }
+             
             //getting campaign data
             var camp_results = database.Query<CampaignData>(
-                "SELECT DISTINCT C.CampaignID, CampaignName\r\n" +
-                "FROM Campaigns C\r\n" +
-                "INNER JOIN CampaignSessions CS\r\nON C.CampaignID = CS.CampaignID\r\n" +
-                "INNER JOIN CampaignPlayers CaP\r\nON CS.CampaignID = CaP.CampaignID\r\n" +
-                "INNER JOIN Players P\r\nON CaP.PlayerID = P.PlayerID\r\n" +
-                where_condition
+                query_string
                 );
 
             string to_print = "";
 
-            //foreach (CampaignData campaignData in results)
-            //{
-            //    to_print +=
-            //        "Campaign ID: " + campaignData.Campaign_ID
-            //        + " // Campaign Name: " + campaignData.Campaign_Name
-            //        + "\n"
-            //        ;
-            //}
-
             //getting player data
             var player_results = database.Query<PlayerData>(
-                "SELECT DISTINCT C.CampaignID, CampaignName, Cap.PlayerID, P.PlayerName\r\n" +
-                "FROM Campaigns C\r\n" +
-                "INNER JOIN CampaignSessions CS\r\nON C.CampaignID = CS.CampaignID\r\n" +
-                "INNER JOIN CampaignPlayers CaP\r\nON CS.CampaignID = CaP.CampaignID\r\n" +
-                "INNER JOIN Players P\r\nON CaP.PlayerID = P.PlayerID\r\n" +
-                where_condition
+                query_string
                 );
-
-            //foreach (PlayerData playerData in results2)
-            //{
-            //    to_print +=
-            //        "// Player ID: " + playerData.Player_ID
-            //        + " // Player Name: " + playerData.Player_Name
-            //        + "\n"
-            //        ;
-            //}
 
             for (int i = 0; i < player_results.Count; i++)
             {
