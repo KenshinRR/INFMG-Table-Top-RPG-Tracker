@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using SQLite;
 using Assets.Scripts.Data_Classes;
+using TMPro;
 
 namespace Assets.Scripts.Queries
 {
@@ -14,6 +15,7 @@ namespace Assets.Scripts.Queries
     {
 
         private SQLiteConnection database;
+        private TextMeshProUGUI _label;
 
         void Start()
         {
@@ -24,10 +26,10 @@ namespace Assets.Scripts.Queries
         public void OnCampaignDataView()
         {
             var results = database.Query<CampaignData>(
-                "SELECT * FROM 'Campaigns'"
+                "SELECT * FROM Campaigns"
                 );
 
-            string to_print = "Campaigns:\n";
+            string to_print = "";
 
             foreach (CampaignData campaign in results)
             {
@@ -41,35 +43,39 @@ namespace Assets.Scripts.Queries
 
             //replace debug to sending the text to the text UI
             Debug.Log(to_print);
+
+            this.UpdateText(to_print);
         }
 
         public void OnPlayerDataView()
         {
             var results = database.Query<PlayerData>(
-                "SELECT \"Player ID\", \"Player Name\" FROM Players"
+                "SELECT PlayerID, PlayerName FROM Players"
                 );
 
-            string to_print = "Players:\n";
+            string to_print = "";
 
             foreach (PlayerData playerData in results)
             {
                 to_print +=
                     "ID: " + playerData.Player_ID
-                    + " // Date: " + playerData.Player_Name
+                    + " // Name: " + playerData.Player_Name
                     + "\n"
                     ;
             }
 
             Debug.Log(to_print);
+
+            this.UpdateText(to_print);
         }
 
         public void OnSessionDataView()
         {
             var results = database.Query<SessionLogData>(
-                "SELECT \"Session ID\", Date FROM 'Session Logs'"
+                "SELECT SessionID, Date FROM Session_Logs"
                 );
 
-            string to_print = "Sessions:\n";
+            string to_print = "";
 
             foreach (SessionLogData sessionLog in results)
             {
@@ -81,15 +87,17 @@ namespace Assets.Scripts.Queries
             }
 
             Debug.Log(to_print);
+
+            this.UpdateText(to_print);
         }
 
         public void OnLogsDataView()
         {
             var results = database.Query<Log_Entry_Data>(
-                "SELECT \"Log ID\", \"Description 0\" FROM 'Log Entries'"
+                "SELECT LogID, Description0 FROM Log_Entries"
                 );
 
-            string to_print = "Sessions:\n";
+            string to_print = "";
 
             foreach (Log_Entry_Data logData in results)
             {
@@ -101,7 +109,64 @@ namespace Assets.Scripts.Queries
             }
 
             Debug.Log(to_print);
+
+            this.UpdateText(to_print);
         }
 
+        public void OnItemDataView()
+        {
+            var results = database.Query<Item_Data>(
+                "SELECT * FROM Items"
+                );
+
+            string to_print = "";
+
+            foreach (Item_Data itemData in results)
+            {
+                to_print +=
+                    "ID: " + itemData.Item_ID
+                    + " // Name: " + itemData.Item_Name
+                    + " // Desc: " + itemData.Item_Description
+                    + "\n"
+                    ;
+            }
+
+            Debug.Log(to_print);
+
+            this.UpdateText(to_print);
+        }
+
+        public void OnAbilityDataView()
+        {
+            var results = database.Query<Action_Data>(
+                "SELECT * FROM Actions"
+                );
+
+            string to_print = "";
+
+            foreach (Action_Data actionData in results)
+            {
+                to_print +=
+                    "ID: " + actionData.Action_ID
+                    + " // Name: " + actionData.Action_Name
+                    + " // Desc: " + actionData.Action_Description
+                    + "\n"
+                    ;
+            }
+
+            Debug.Log(to_print);
+
+            this.UpdateText(to_print);
+        }
+
+        public void AssignTextLabel(TextMeshProUGUI current_label)
+        {
+            this._label = current_label;
+        }
+
+        private void UpdateText(string to_display)
+        {
+            this._label.text = to_display;
+        }
     }
 }

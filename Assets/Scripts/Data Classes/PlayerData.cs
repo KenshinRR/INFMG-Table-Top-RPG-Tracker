@@ -7,15 +7,15 @@ using SQLite;
 
 namespace Assets.Scripts.Data_Classes
 {
-    [Table("Player")]
+    [Table("Players")]
     public class PlayerData
     {
-        [PrimaryKey]
-        [Column("Player ID")]
+        [PrimaryKey, AutoIncrement]
+        [Column("PlayerID")]
         public int Player_ID
         { get; set; }
 
-        [Column("Player Name")]
+        [Column("PlayerName")]
         public string Player_Name
         { get; set; }
     }

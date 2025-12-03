@@ -25,22 +25,15 @@ public class SQLCommanderHelper : MonoBehaviour
         if (_do_it)
         {
             _do_it = false;
-            var results = database.Query<Log_Entry_Data>(
-                "SELECT \"Log ID\", \"Description 0\" FROM 'Log Entries'"
-                );
 
-            string to_print = "Sessions:\n";
+            string query =
+                $"INSERT INTO Actions (Action_Name, Action_Description) " +
+                $"VALUES ('Yell', 'Causes another person to move faster');";
 
-            foreach (Log_Entry_Data logData in results)
-            {
-                to_print +=
-                    "ID: " + logData.Log_ID
-                    + " // Desc 0: " + logData.Desc0
-                    + "\n"
-                    ;
-            }
+            database.Query<Action_Data>(query);
 
-            Debug.Log(to_print);
+
+            Debug.Log($"Added Action entry: Yell");
         }
     }
 }

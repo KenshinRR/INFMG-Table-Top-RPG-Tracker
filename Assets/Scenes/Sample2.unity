@@ -906,7 +906,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Items:'
+  m_text: 'Abilities:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3894,7 +3894,7 @@ GameObject:
   - component: {fileID: 45207342}
   - component: {fileID: 45207341}
   m_Layer: 5
-  m_Name: Exit Button (1)
+  m_Name: Back Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6005,7 +6005,7 @@ GameObject:
   - component: {fileID: 78769156}
   - component: {fileID: 78769155}
   m_Layer: 5
-  m_Name: Exit Button (3)
+  m_Name: View Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6083,6 +6083,32 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 13
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024874}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.QueryDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: AssignTextLabel
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1522989042}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024874}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.QueryDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: OnLogsDataView
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -7865,7 +7891,7 @@ GameObject:
   - component: {fileID: 114118391}
   - component: {fileID: 114118390}
   m_Layer: 5
-  m_Name: Exit Button (4)
+  m_Name: Edit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14031,7 +14057,7 @@ GameObject:
   - component: {fileID: 198912834}
   - component: {fileID: 198912833}
   m_Layer: 5
-  m_Name: Exit Button (5)
+  m_Name: Delete Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16136,6 +16162,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 220179808}
   m_CullTransparentMesh: 1
+--- !u!1 &221024873
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 221024875}
+  - component: {fileID: 221024874}
+  - component: {fileID: 221024876}
+  m_Layer: 0
+  m_Name: Data View Handler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &221024874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221024873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b35cf3580ac82e54ab173ee571b772b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &221024875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221024873}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 826.6216, y: 574.88983, z: 5.1775723}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &221024876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221024873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18dde9b2becd6e46894e1f6d6bb918d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _do_it: 0
 --- !u!1 &222860156
 GameObject:
   m_ObjectHideFlags: 0
@@ -18898,7 +18982,7 @@ GameObject:
   - component: {fileID: 271809024}
   - component: {fileID: 271809023}
   m_Layer: 5
-  m_Name: Exit Button (4)
+  m_Name: Edit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20746,7 +20830,7 @@ GameObject:
   - component: {fileID: 300442899}
   - component: {fileID: 300442898}
   m_Layer: 5
-  m_Name: Exit Button (4)
+  m_Name: Edit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22635,7 +22719,7 @@ GameObject:
   - component: {fileID: 328345211}
   - component: {fileID: 328345210}
   m_Layer: 5
-  m_Name: Exit Button (7)
+  m_Name: Back Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22820,7 +22904,7 @@ GameObject:
   - component: {fileID: 338303612}
   - component: {fileID: 338303611}
   m_Layer: 5
-  m_Name: Exit Button (1)
+  m_Name: Back Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23434,7 +23518,7 @@ GameObject:
   - component: {fileID: 354600781}
   - component: {fileID: 354600780}
   m_Layer: 5
-  m_Name: Exit Button (3)
+  m_Name: View Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23512,6 +23596,32 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024874}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.QueryDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: AssignTextLabel
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 823150820}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024874}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.QueryDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: OnCampaignDataView
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -23703,7 +23813,7 @@ GameObject:
   - component: {fileID: 355740775}
   - component: {fileID: 355740774}
   m_Layer: 5
-  m_Name: Exit Button (6)
+  m_Name: Create Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29323,7 +29433,7 @@ GameObject:
   - component: {fileID: 451629169}
   - component: {fileID: 451629168}
   m_Layer: 5
-  m_Name: Exit Button (1)
+  m_Name: Back Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32714,7 +32824,7 @@ GameObject:
   - component: {fileID: 506083317}
   - component: {fileID: 506083316}
   m_Layer: 5
-  m_Name: Exit Button (3)
+  m_Name: View Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32792,6 +32902,32 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 18
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024874}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.QueryDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: AssignTextLabel
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 572426801}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024874}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.QueryDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: OnPlayerDataView
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -38217,7 +38353,7 @@ GameObject:
   - component: {fileID: 607832563}
   - component: {fileID: 607832562}
   m_Layer: 5
-  m_Name: Exit Button (5)
+  m_Name: Delete Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50942,7 +51078,7 @@ GameObject:
   - component: {fileID: 825671269}
   - component: {fileID: 825671268}
   m_Layer: 5
-  m_Name: Exit Button (5)
+  m_Name: Delete Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52503,7 +52639,7 @@ GameObject:
   - component: {fileID: 850129254}
   - component: {fileID: 850129253}
   m_Layer: 5
-  m_Name: Exit Button (2)
+  m_Name: Back Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57863,7 +57999,7 @@ GameObject:
   - component: {fileID: 928457332}
   - component: {fileID: 928457331}
   m_Layer: 5
-  m_Name: Exit Button (6)
+  m_Name: Create Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58425,7 +58561,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Sessions:'
+  m_text: 'Logs:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -59247,7 +59383,7 @@ GameObject:
   - component: {fileID: 960180649}
   - component: {fileID: 960180648}
   m_Layer: 5
-  m_Name: Exit Button (6)
+  m_Name: Create Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70124,7 +70260,7 @@ GameObject:
   - component: {fileID: 1140233912}
   - component: {fileID: 1140233911}
   m_Layer: 5
-  m_Name: Exit Button (3)
+  m_Name: View Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70202,6 +70338,32 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 8
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024874}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.QueryDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: AssignTextLabel
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 310841998}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024874}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.QueryDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: OnSessionDataView
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -74649,7 +74811,7 @@ GameObject:
   - component: {fileID: 1224513811}
   - component: {fileID: 1224513810}
   m_Layer: 5
-  m_Name: Exit Button (7)
+  m_Name: Back Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78058,7 +78220,7 @@ GameObject:
   - component: {fileID: 1274871880}
   - component: {fileID: 1274871879}
   m_Layer: 5
-  m_Name: Exit Button (4)
+  m_Name: Edit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79221,7 +79383,7 @@ GameObject:
   - component: {fileID: 1300926457}
   - component: {fileID: 1300926456}
   m_Layer: 5
-  m_Name: Exit Button (4)
+  m_Name: Edit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89414,7 +89576,7 @@ GameObject:
   - component: {fileID: 1480244690}
   - component: {fileID: 1480244689}
   m_Layer: 5
-  m_Name: Exit Button (3)
+  m_Name: View Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89492,6 +89654,32 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 23
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024874}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.QueryDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: AssignTextLabel
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1328971761}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024874}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.QueryDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: OnItemDataView
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -92335,7 +92523,7 @@ GameObject:
   - component: {fileID: 1528381278}
   - component: {fileID: 1528381277}
   m_Layer: 5
-  m_Name: Exit Button (4)
+  m_Name: Edit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96441,7 +96629,7 @@ GameObject:
   - component: {fileID: 1586835845}
   - component: {fileID: 1586835844}
   m_Layer: 5
-  m_Name: Exit Button (6)
+  m_Name: Create Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -99196,7 +99384,7 @@ GameObject:
   - component: {fileID: 1633084001}
   - component: {fileID: 1633084000}
   m_Layer: 5
-  m_Name: Exit Button (6)
+  m_Name: Create Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101029,7 +101217,7 @@ GameObject:
   - component: {fileID: 1670100092}
   - component: {fileID: 1670100091}
   m_Layer: 5
-  m_Name: Exit Button (5)
+  m_Name: Delete Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113176,7 +113364,7 @@ GameObject:
   - component: {fileID: 1862104691}
   - component: {fileID: 1862104690}
   m_Layer: 5
-  m_Name: Exit Button (5)
+  m_Name: Delete Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114401,7 +114589,7 @@ GameObject:
   - component: {fileID: 1883132933}
   - component: {fileID: 1883132932}
   m_Layer: 5
-  m_Name: Exit Button (5)
+  m_Name: Delete Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -126990,7 +127178,7 @@ GameObject:
   - component: {fileID: 2100787853}
   - component: {fileID: 2100787852}
   m_Layer: 5
-  m_Name: Exit Button (3)
+  m_Name: View Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127068,6 +127256,32 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 28
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024874}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.QueryDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: AssignTextLabel
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1720009738}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 221024874}
+        m_TargetAssemblyTypeName: Assets.Scripts.Queries.QueryDataViewerHandler,
+          Assembly-CSharp
+        m_MethodName: OnAbilityDataView
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -130171,7 +130385,7 @@ GameObject:
   - component: {fileID: 2144875579}
   - component: {fileID: 2144875578}
   m_Layer: 5
-  m_Name: Exit Button (6)
+  m_Name: Create Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130300,3 +130514,4 @@ SceneRoots:
   - {fileID: 795675785}
   - {fileID: 203754957}
   - {fileID: 641584095}
+  - {fileID: 221024875}
