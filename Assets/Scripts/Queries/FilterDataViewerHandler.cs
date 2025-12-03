@@ -8,6 +8,7 @@ using SQLite;
 using TMPro;
 using UnityEngine.Windows;
 using Assets.Scripts.Data_Classes;
+using Unity.VisualScripting;
 
 namespace Assets.Scripts.Queries
 {
@@ -68,57 +69,68 @@ namespace Assets.Scripts.Queries
             }
             else
             {
-                camp_id_exists = false;
                 Debug.LogWarning("Invalid input: '" + if_playerID.text + "' cannot be converted to an integer.");
             }
 
+            //checking if there are inputs
             if (!camp_id_exists  && !player_id_exists)
             {
                 Debug.LogError("No inputted filters!");
+
+                GetComponent<QueryDataViewerHandler>().OnCampaignDataView();
+
                 return;
             }
 
             //getting campaign data
-            var results = database.Query<CampaignData>(
-                "SELECT DISTINCT C.CampaignID, CampaignName, Cap.PlayerID, P.PlayerName\r\n" +
-                "FROM Campaigns C" +
-                "INNER JOIN CampaignSessions CS\r\nON C.CampaignID = CS.CampaignID" +
-                "INNER JOIN CampaignPlayers CaP\r\nON CS.CampaignID = CaP.CampaignID" +
-                "INNER JOIN Players P\r\nON CaP.PlayerID = P.PlayerID" +
+            var camp_results = database.Query<CampaignData>(
+                "SELECT DISTINCT C.CampaignID, CampaignName\r\n" +
+                "FROM Campaigns C\r\n" +
+                "INNER JOIN CampaignSessions CS\r\nON C.CampaignID = CS.CampaignID\r\n" +
+                "INNER JOIN CampaignPlayers CaP\r\nON CS.CampaignID = CaP.CampaignID\r\n" +
+                "INNER JOIN Players P\r\nON CaP.PlayerID = P.PlayerID\r\n" +
                 where_condition
                 );
 
             string to_print = "";
 
-            foreach (CampaignData campaignData in results)
-            {
-                to_print +=
-                    "Campaign ID: " + campaignData.Campaign_ID
-                    + " // Campaign Name: " + campaignData.Campaign_Name
-                    + "\n"
-                    ;
-            }
+            //foreach (CampaignData campaignData in results)
+            //{
+            //    to_print +=
+            //        "Campaign ID: " + campaignData.Campaign_ID
+            //        + " // Campaign Name: " + campaignData.Campaign_Name
+            //        + "\n"
+            //        ;
+            //}
 
             //getting player data
-            var results2 = database.Query<PlayerData>(
+            var player_results = database.Query<PlayerData>(
                 "SELECT DISTINCT C.CampaignID, CampaignName, Cap.PlayerID, P.PlayerName\r\n" +
-                "FROM Campaigns C" +
-                "INNER JOIN CampaignSessions CS\r\nON C.CampaignID = CS.CampaignID" +
-                "INNER JOIN CampaignPlayers CaP\r\nON CS.CampaignID = CaP.CampaignID" +
-                "INNER JOIN Players P\r\nON CaP.PlayerID = P.PlayerID" +
+                "FROM Campaigns C\r\n" +
+                "INNER JOIN CampaignSessions CS\r\nON C.CampaignID = CS.CampaignID\r\n" +
+                "INNER JOIN CampaignPlayers CaP\r\nON CS.CampaignID = CaP.CampaignID\r\n" +
+                "INNER JOIN Players P\r\nON CaP.PlayerID = P.PlayerID\r\n" +
                 where_condition
                 );
 
-            foreach (PlayerData playerData in results2)
+            //foreach (PlayerData playerData in results2)
+            //{
+            //    to_print +=
+            //        "// Player ID: " + playerData.Player_ID
+            //        + " // Player Name: " + playerData.Player_Name
+            //        + "\n"
+            //        ;
+            //}
+
+            for (int i = 0; i < player_results.Count; i++)
             {
                 to_print +=
-                    "// Player ID: " + playerData.Player_ID
-                    + " // Player Name: " + playerData.Player_Name
-                    + "\n"
+                    $"Campaign ID: {camp_results[i].Campaign_ID} // Campaign Name: {camp_results[i].Campaign_Name} // " +
+                    $"Player ID: {player_results[i].Player_ID} // Player Name: {player_results[i].Player_Name}"
                     ;
             }
 
-            Debug.Log(to_print);
+            //Debug.Log(to_print);
 
             this.UpdateText(to_print);
         }

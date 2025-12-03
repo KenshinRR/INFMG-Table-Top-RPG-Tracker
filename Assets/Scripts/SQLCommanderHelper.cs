@@ -26,11 +26,24 @@ public class SQLCommanderHelper : MonoBehaviour
         {
             _do_it = false;
 
-            string query =
-                $"INSERT INTO CampaignPlayers (CampaignID, PlayerID) " +
-                $"VALUES ('0', '1');";
+            //insert
+            //string query =
+            //    $"INSERT INTO CampaignPlayers (CampaignID, PlayerID) " +
+            //    $"VALUES ('0', '1');";
 
-            database.Query<CampaignPlayers>(query);
+            //database.Query<CampaignPlayers>(query);
+
+
+            //Debug.Log($"Added new entry");
+
+            string query =
+                "SELECT C.CampaignID, CampaignName\r\n" +
+                "FROM Campaigns C\r\n" +
+                "INNER JOIN CampaignSessions CS\r\nON C.CampaignID = CS.CampaignID\r\n" +
+                "INNER JOIN CampaignPlayers CaP\r\nON CS.CampaignID = CaP.CampaignID\r\n" +
+                "INNER JOIN Players P\r\nON CaP.PlayerID = P.PlayerID";
+
+            database.Query<CampaignData>(query);
 
 
             Debug.Log($"Added new entry");
