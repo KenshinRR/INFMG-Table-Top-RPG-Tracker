@@ -115,7 +115,7 @@ namespace Assets.Scripts.Queries
             }
             else if (!camp_id_exists && player_id_exists)
             {
-                query_string = $"SELECT DISTINCT C.CampaignID, CampaignName, P.PlayerID\r\n" +
+                query_string = $"SELECT DISTINCT C.CampaignID, CampaignName, P.PlayerID, P.PlayerName\r\n" +
                     "FROM Campaigns C\r\n" +
                     "INNER JOIN CampaignSessions CS ON C.CampaignID = CS.CampaignID\r\n" +
                     "INNER JOIN CampaignPlayers CaP ON CS.CampaignID = CaP.CampaignID\r\n" +
@@ -125,7 +125,7 @@ namespace Assets.Scripts.Queries
             else if (camp_id_exists && player_id_exists)
             {
                 query_string =
-                    "SELECT DISTINCT C.CampaignID, CampaignName, P.PlayerID\r\n" +
+                    "SELECT DISTINCT C.CampaignID, CampaignName, P.PlayerID, P.PlayerName\r\n" +
                     "FROM Campaigns C\r\n" +
                     "INNER JOIN CampaignSessions CS ON C.CampaignID = CS.CampaignID\r\n" +
                     "INNER JOIN CampaignPlayers CaP ON CS.CampaignID = CaP.CampaignID\r\n" +
@@ -154,7 +154,7 @@ namespace Assets.Scripts.Queries
                     ;
             }
 
-            //Debug.Log(to_print);
+            Debug.Log(to_print);
 
             this.UpdateText(to_print);
         }
@@ -280,7 +280,7 @@ namespace Assets.Scripts.Queries
                     ;
             }
 
-            //Debug.Log(to_print);
+            Debug.Log(to_print);
 
             this.UpdateText(to_print);
         }
@@ -323,7 +323,7 @@ namespace Assets.Scripts.Queries
                     ;
             }
 
-            //Debug.Log(to_print);
+            Debug.Log(to_print);
 
             this.UpdateText(to_print);
 
@@ -420,10 +420,13 @@ namespace Assets.Scripts.Queries
                 {
                     to_print +=
                         $"= Player ID: {pc_results[i].Player_ID} // Character ID: {Ch_results[i].Character_ID} // " +
-                        $"Character Type: {Ch_results[i].Character_Type} // Character Name: {Ch_results[i].Character_Name}"
+                        $"Character Type: {Ch_results[i].Character_Type} // Character Name: {Ch_results[i].Character_Name}" +
+                        $"\r\n"
                         ;
                 }
             }
+
+            Debug.Log(to_print);
 
             this.UpdateText(to_print);
         }
