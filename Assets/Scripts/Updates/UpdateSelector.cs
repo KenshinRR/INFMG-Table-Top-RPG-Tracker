@@ -1,18 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using SQLite;
 using Assets.Scripts.Data_Classes;
-using Assets.Scripts.Relations;
-using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
-using static UnityEditor.Progress;
-using Unity.VisualScripting;
-using NUnit.Framework.Internal;
 
 public class UpdateSelector : MonoBehaviour
 {
@@ -51,7 +40,7 @@ public class UpdateSelector : MonoBehaviour
     //Header
     void Start()
     {
-        string file_loc = Application.dataPath + "/Database/MyDb.db";
+        string file_loc = Application.persistentDataPath + "/Database/MyDb.db";
         this.database = new SQLiteConnection(file_loc);
     }
 

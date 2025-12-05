@@ -10,7 +10,7 @@ public class DeleteManager : MonoBehaviour
 
     void Start()
     {
-        string fileLoc = Application.dataPath + "/Database/MyDb.db";
+        string fileLoc = Application.persistentDataPath + "/Database/MyDb.db";
         database = new SQLiteConnection(fileLoc);
         Debug.Log("DeleteManager connected to DB");
     }

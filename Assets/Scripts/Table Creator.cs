@@ -15,7 +15,7 @@ public class TableCreator : MonoBehaviour
         // 1. Create a connection to the database.
         // The special ":memory:" in-memory database and
         // URIs like "file:///somefile" are also supported
-        string file_loc = Application.dataPath + "/Database/MyDb.db";
+        string file_loc = Application.persistentDataPath + "/Database/MyDb.db";
         this.database = new SQLiteConnection(file_loc);
         Debug.Log($"Database file at {file_loc}");
 

@@ -30,7 +30,7 @@ public class SessionUpdater : MonoBehaviour
     private int ID = 0;
     void Start()
     {
-        string file_loc = Application.dataPath + "/Database/MyDb.db";
+        string file_loc = Application.persistentDataPath + "/Database/MyDb.db";
         this.database = new SQLiteConnection(file_loc);
     }
 

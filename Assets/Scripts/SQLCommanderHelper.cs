@@ -1,12 +1,5 @@
-using Assets.Scripts.Data_Classes;
-using Assets.Scripts.Relations;
 using SQLite;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Profiling;
-using static UnityEditor.Progress;
 
 [Tooltip("Use this script to run custom SQL script on start")]
 public class SQLCommanderHelper : MonoBehaviour
@@ -16,7 +9,7 @@ public class SQLCommanderHelper : MonoBehaviour
 
     void Start()
     {
-        string file_loc = Application.dataPath + "/Database/MyDb.db";
+        string file_loc = Application.persistentDataPath + "/Database/MyDb.db";
         this.database = new SQLiteConnection(file_loc);
     }
 
@@ -45,7 +38,7 @@ public class SQLCommanderHelper : MonoBehaviour
 
             //database.Query<CampaignData>(query);
 
-            //InsertInitialData();
+            InsertInitialData();
             Debug.Log($"Added new entry");
         }
     }
